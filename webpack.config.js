@@ -1,3 +1,4 @@
+// Michael Stone - u21497682
 const path = require("path");
 
 module.exports = {
