@@ -2,10 +2,10 @@
   "name": "imy220_project",
   "version": "1.0.0",
   "description": "This project consists of creating a Playlist Sharing Website using web technologies that I've been taught in the module IMY220",
-  "main": "server.js",
+  "main": "frontend/src/index.js",
   "scripts": {
-    "build": "webpack && babel server.js -d dist",
- "start": "npm run build && node dist/server.js"
+    "build": "webpack && babel backend/server.js -d backend/dist",
+ "start": "npm run build && node backend/dist/server.js"
   },
   "author": "",
   "license": "ISC",
