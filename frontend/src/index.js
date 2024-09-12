@@ -1,20 +1,25 @@
-//Michael Stone - u21497682
+// Michael Stone - u21497682
 import React from "react";
 import ReactDOM from "react-dom/client";
+import AddSong from "./components/General/AddSong"; // Corrected case
 
-// class Greeting extends React.Component 
-// {
-//     render() 
-//     {
-//         return (
-//             <div>
-//                 <h2> Hello React! </h2>
-//             </div>
-//         );
-//     }
-// }
+class App extends React.Component 
+{
+  handleSaveSong = (song) => {
+    console.log('Song added:', song);
+    // Add your logic to save the song to a playlist or a database
+  };
+
+  render() 
+  {
+    return (
+      <div>
+        <h1>Music Playlist</h1>
+        <AddSong onSave={this.handleSaveSong} />
+      </div>
+    );
+  }
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-// root.render(<Greeting />);
-
-// render App
+root.render(<App />);
