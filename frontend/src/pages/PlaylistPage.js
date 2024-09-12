@@ -3,7 +3,7 @@ import React from 'react';
 // import { Link } from 'react-router-dom';
 import Navigation from "../components/General/Navigation"
 
-const Playlist = () => {
+const PlaylistPage = () => {
   return (
     <div>
       <h1>Playlist Page!</h1>
@@ -12,4 +12,4 @@ const Playlist = () => {
   );
 };
 
-export default Playlist;
+export default PlaylistPage;

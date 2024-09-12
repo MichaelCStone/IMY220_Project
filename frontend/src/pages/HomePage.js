@@ -5,7 +5,7 @@ import Navigation from "../components/General/Navigation"
 import SongFeed from '../components/Home/SongFeed';
 import PlaylistFeed from '../components/Home/PlaylistFeed';
 
-class Home extends Component 
+class HomePage extends Component 
 {
   render() 
   {
@@ -27,4 +27,4 @@ class Home extends Component
   }
 }
 
-export default Home;
+export default HomePage;

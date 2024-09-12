@@ -1,10 +1,10 @@
 //Michael Stone - u21497682
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Splash from './pages/Splash';
-import Playlist from './pages/Playlist';
-import Profile from './pages/Profile';
+import HomePage from './pages/HomePage';
+import SplashPage from './pages/SplashPage';
+import PlaylistPage from './pages/PlaylistPage';
+import ProfilePage from './pages/ProfilePage';
 
 class App extends Component {
   constructor(props) {
@@ -52,10 +52,10 @@ class App extends Component {
     return (
       <Router>
         <Routes>
-          <Route path="/" element={<Splash />} />
-          <Route path="/home" element={<Home songs={this.state.songs} playlists={this.state.playlists} onAddSong={this.addSong} />} />
-          <Route path="/playlist" element={<Playlist />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/" element={<SplashPage />} />
+          <Route path="/home" element={<HomePage songs={this.state.songs} playlists={this.state.playlists} onAddSong={this.addSong} />} />
+          <Route path="/playlist" element={<PlaylistPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </Router>
     );

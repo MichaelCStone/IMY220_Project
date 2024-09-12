@@ -3,7 +3,7 @@ import React from 'react';
 // import { Link } from 'react-router-dom';
 import Navigation from "../components/General/Navigation"
 
-const Profile = () => {
+const ProfilePage = () => {
   return (
     <div>
       <h1>Profile Page!</h1>
@@ -12,4 +12,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;

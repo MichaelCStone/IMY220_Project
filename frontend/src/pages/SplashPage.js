@@ -2,7 +2,7 @@ import React from 'react';
 import LoginForm from '../components/Splash/LoginForm'; // Adjust the import path if needed
 import SignUpForm from '../components/Splash/SignUp'; // Adjust the import path if needed
 
-const Splash = () => {
+const SplashPage = () => {
   return (
     <div className="splash-page">
       <h1>Welcome to Groovella</h1>
@@ -18,4 +18,4 @@ const Splash = () => {
   );
 };
 
-export default Splash;
+export default SplashPage;
