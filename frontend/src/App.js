@@ -15,6 +15,7 @@ class App extends Component {
         { title: 'Song 2', artist: 'Artist 2', album: 'Album 2', genre: 'Rock', year: 2021 },
         { title: 'Song 3', artist: 'Artist 3', album: 'Album 3', genre: 'Jazz', year: 2020 },
       ],
+
       playlists: [
         {
           name: 'Chill Vibes',
@@ -38,6 +39,23 @@ class App extends Component {
           description: 'High-energy hits to keep you moving.',
           songs: ['Song 4', 'Song 5', 'Song 6']
         }
+      ],
+
+      profile: {
+        name: "Michael Stone",
+        bio: "Music enthusiast and developer from South Africa",
+        country: "South Africa",
+        picture: "https://example.com/profile-picture.jpg",
+      },
+
+      followers: [
+        { id: 1, name: "Alice" },
+        { id: 2, name: "Bob" },
+      ],
+
+      following: [
+        { id: 3, name: "Charlie" },
+        { id: 4, name: "Diana" },
       ]
     };
   }
@@ -49,13 +67,15 @@ class App extends Component {
   };
 
   render() {
+    const { songs, playlists, profile, followers, following } = this.state;
+
     return (
       <Router>
         <Routes>
           <Route path="/" element={<SplashPage />} />
           <Route path="/home" element={<HomePage songs={this.state.songs} playlists={this.state.playlists} onAddSong={this.addSong} />} />
           <Route path="/playlist" element={<PlaylistPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile" element={<ProfilePage profile={profile} playlists={playlists} followers={followers} following={following} />} />
         </Routes>
       </Router>
     );
