@@ -3,6 +3,7 @@ import React from 'react';
 // import { Link } from 'react-router-dom';
 import Navigation from "../components/General/Navigation"
 import SongFeed from '../components/Home/SongFeed';
+import PlaylistFeed from '../components/Home/PlaylistFeed';
 
 const Home = () => {
   return (
@@ -11,6 +12,9 @@ const Home = () => {
       <Navigation />
       <div>
         <SongFeed />
+      </div>
+      <div>
+        <PlaylistFeed />
       </div>
     </div>
   );
