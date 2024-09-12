@@ -6,7 +6,7 @@ import Profile from '../components/Profile/Profile';
 import EditProfile from '../components/Profile/EditProfile';
 import PlaylistPreview from '../components/General/PlaylistPreview';
 import ProfilePreview from '../components/General/ProfilePreview';
-
+import CreatePlaylist from '../components/Profile/CreatePlaylist';
 
 class ProfilePage extends Component
 {
@@ -16,9 +16,11 @@ class ProfilePage extends Component
 
     this.state = {
       isEditing: false,
+      isCreatingPlaylist: false,
     };
 
     this.toggleEdit = this.toggleEdit.bind(this);
+    this.toggleCreatePlaylist = this.toggleCreatePlaylist.bind(this);
   }
 
   toggleEdit() 
@@ -28,10 +30,16 @@ class ProfilePage extends Component
     }));
   }
 
+  toggleCreatePlaylist() {
+    this.setState((prevState) => ({
+      isCreatingPlaylist: !prevState.isCreatingPlaylist,
+    }));
+  }
+
   render()
   {
     const { profile, playlists, followers, following } = this.props;
-    const { isEditing } = this.state;
+    const { isEditing, isCreatingPlaylist } = this.state;
 
     return (
       <div>
@@ -51,7 +59,15 @@ class ProfilePage extends Component
           {playlists.map((playlist, index) => (
             <PlaylistPreview key={index} playlist={playlist} />
           ))}
+
+          <button onClick={this.toggleCreatePlaylist}>
+            {isCreatingPlaylist ? 'Cancel' : 'Create New Playlist'}
+          </button>
+
+          {isCreatingPlaylist && <CreatePlaylist />}
         </div>
+
+        
 
         <div className="followers">
           <h3>Followers</h3>
