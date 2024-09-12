@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 
 class Profile extends Component {
-    render() {
+    render() 
+    {
         const { profile } = this.props;
 
         return (

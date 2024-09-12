@@ -14,13 +14,23 @@ class ProfilePage extends Component
   {
     super(props);
 
+    // this.state = {
+    //   isEditing: false,
+    //   isCreatingPlaylist: false,
+    // };
+
     this.state = {
+      profile: props.profile, // use profile data from props
+      playlists: props.playlists, // use playlists data from props
+      followers: props.followers, // use followers data from props
+      following: props.following, // use following data from props
       isEditing: false,
-      isCreatingPlaylist: false,
+      isCreatingPlaylist: false
     };
 
     this.toggleEdit = this.toggleEdit.bind(this);
     this.toggleCreatePlaylist = this.toggleCreatePlaylist.bind(this);
+    this.handleProfileUpdate = this.handleProfileUpdate.bind(this);
   }
 
   toggleEdit() 
@@ -30,16 +40,30 @@ class ProfilePage extends Component
     }));
   }
 
-  toggleCreatePlaylist() {
+  toggleCreatePlaylist() 
+  {
     this.setState((prevState) => ({
       isCreatingPlaylist: !prevState.isCreatingPlaylist,
     }));
   }
 
+  handleProfileUpdate(updatedProfile) 
+  {
+    this.setState({ profile: updatedProfile, isEditing: false });
+  }
+
+  handleAddPlaylist = (newPlaylist) => {
+    this.setState((prevState) => ({
+      playlists: [...prevState.playlists, newPlaylist],
+      isCreatingPlaylist: false,  // Hide the form after submission
+    }));
+  }
+
   render()
   {
-    const { profile, playlists, followers, following } = this.props;
-    const { isEditing, isCreatingPlaylist } = this.state;
+    // const { profile, playlists, followers, following } = this.props;
+    // const { isEditing, isCreatingPlaylist } = this.state;
+    const { profile, playlists, followers, following, isEditing, isCreatingPlaylist } = this.state;
 
     return (
       <div>
@@ -51,7 +75,12 @@ class ProfilePage extends Component
         </div>
 
         <div>
-          {isEditing && <EditProfile profile={profile} toggleEdit={this.toggleEdit} />}
+          <button onClick={this.toggleEdit}>
+            {isEditing ? 'Cancel' : 'Edit Profile'}
+          </button>
+
+          {/* {isEditing && <EditProfile profile={profile} toggleEdit={this.toggleEdit} />} */}
+          {isEditing && <EditProfile profile={profile} onSave={this.handleProfileUpdate} />}
         </div>
 
         <div className="playlists">
@@ -64,10 +93,8 @@ class ProfilePage extends Component
             {isCreatingPlaylist ? 'Cancel' : 'Create New Playlist'}
           </button>
 
-          {isCreatingPlaylist && <CreatePlaylist />}
+          {isCreatingPlaylist && <CreatePlaylist addPlaylist={this.handleAddPlaylist} />}
         </div>
-
-        
 
         <div className="followers">
           <h3>Followers</h3>

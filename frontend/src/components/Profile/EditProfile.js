@@ -8,9 +8,9 @@ class EditProfile extends Component
         super(props);
 
         this.state = {
-            name: props.user.name,
-            bio: props.user.bio,
-            country: props.user.country,
+            name: props.profile.name,
+            bio: props.profile.bio,
+            country: props.profile.country,
         };
     }
 
