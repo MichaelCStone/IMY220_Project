@@ -21,7 +21,8 @@ class AddSongToPlaylist extends Component
         const { selectedSong } = this.state;
         const { onAddSongToPlaylist } = this.props;
 
-        if (selectedSong && onAddSongToPlaylist) {
+        if (selectedSong && onAddSongToPlaylist) 
+        {
             onAddSongToPlaylist(selectedSong);
             this.setState({ selectedSong: '' });
         }
@@ -42,7 +43,9 @@ class AddSongToPlaylist extends Component
                         <select value={selectedSong} onChange={this.handleSongChange} required>
                             <option value="">Select a song</option>
                             {songs.map((song, index) => (
-                                <option key={index} value={song.title}>{song.title}</option>
+                                <option key={index} value={song.title}>
+                                    {song.title} - {song.artist}
+                                </option>
                             ))}
                         </select>
                     </div>

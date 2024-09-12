@@ -13,7 +13,7 @@ class SongList extends Component
       <div className="song-list">
         <h3>Songs in Playlist</h3>
         {songs.map((song, index) => (
-          <SongComponent key={index} song={song} />
+          <Song key={index} song={song} />
         ))}
       </div>
     );

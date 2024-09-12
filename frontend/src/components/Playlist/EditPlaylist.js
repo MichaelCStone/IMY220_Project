@@ -7,7 +7,14 @@ class EditPlaylist extends Component
   {
     super(props);
     
-    this.state = { ...props.playlist };
+    // this.state = { ...props.playlist };
+    this.state = { 
+      name: props.playlist.name,
+      genre: props.playlist.genre,
+      category: props.playlist.category,
+      hashtags: props.playlist.hashtags,
+      description: props.playlist.description
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,13 +25,29 @@ class EditPlaylist extends Component
     this.setState({ [name]: value });
   }
 
+  // handleSubmit(event) {
+  //   event.preventDefault();
+  //   this.props.onSubmit(this.state);  // Pass updated playlist data to the parent component
+  // }
+
   handleSubmit(event) {
     event.preventDefault();
-    this.props.onSubmit(this.state);  // Pass updated playlist data to the parent component
+
+    const updatedPlaylist = {
+      ...this.props.playlist,
+      name: this.state.name,
+      genre: this.state.genre,
+      category: this.state.category,
+      hashtags: this.state.hashtags,
+      description: this.state.description
+    };
+
+    // Use the correct prop name for updating the playlist
+    this.props.onUpdatePlaylist(updatedPlaylist);
   }
 
   render() {
-    const { picture, name, genre, category, hashtags, description } = this.state;
+    const { name, genre, category, hashtags, description } = this.state; //add picture
     
     return (
       <form onSubmit={this.handleSubmit}>
@@ -33,7 +56,7 @@ class EditPlaylist extends Component
         <input type="text" name="category" value={category} onChange={this.handleChange} placeholder="Category" />
         <input type="text" name="hashtags" value={hashtags} onChange={this.handleChange} placeholder="Hashtags (comma-separated)" />
         <textarea name="description" value={description} onChange={this.handleChange} placeholder="Description"></textarea>
-        <input type="url" name="picture" value={picture} onChange={this.handleChange} placeholder="Picture URL" />
+        {/* add image section */}
         <button type="submit">Save Changes</button>
       </form>
     );
