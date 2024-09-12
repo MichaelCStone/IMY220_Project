@@ -12,7 +12,8 @@ class AddSong extends Component
             artist: '',
             album: '',
             genre: '',
-            year: ''
+            year: '',
+            songs: []
         };
     }
 
@@ -23,10 +24,12 @@ class AddSong extends Component
     handleSubmit = (event) => {
         event.preventDefault();
 
-        if (this.props.onSave)
-        {
-            this.props.onSave(this.state);
-        }
+        // if (this.props.onSave)
+        // {
+        //     this.props.onSave(this.state);
+        // }
+
+        this.onSave();
 
         this.setState({
             title: '',
@@ -36,6 +39,24 @@ class AddSong extends Component
             year: ''
         });
     }
+
+    onSave = () => {
+        const newSong = {
+          title: this.state.title,
+          artist: this.state.artist,
+          album: this.state.album,
+          genre: this.state.genre,
+          year: this.state.year
+        };
+    
+        // You can log or handle the song in any way you want
+        console.log('Song added:', newSong);
+    
+        // Here we could add the new song to a local state, database, etc.
+        this.setState((prevState) => ({
+          songs: [...prevState.songs, newSong]
+        }));
+      };
 
     render() {
         return (
