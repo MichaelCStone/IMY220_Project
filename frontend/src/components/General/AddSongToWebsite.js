@@ -1,7 +1,7 @@
 // u21497682 - Michael Stone
 import React, { Component } from 'react';
 
-class AddSong extends Component 
+class AddSongToWebsite extends Component 
 {
     constructor (props)
     {
@@ -12,8 +12,8 @@ class AddSong extends Component
             artist: '',
             album: '',
             genre: '',
-            year: '',
-            songs: []
+            year: ''
+            // songs: []
         };
     }
 
@@ -29,7 +29,20 @@ class AddSong extends Component
         //     this.props.onSave(this.state);
         // }
 
-        this.onSave();
+        const newSong = {
+            title: this.state.title,
+            artist: this.state.artist,
+            album: this.state.album,
+            genre: this.state.genre,
+            year: this.state.year
+        };
+
+        // this.onSave();
+
+        if (this.props.onSave) 
+        {
+            this.props.onSave(newSong);
+        }
 
         this.setState({
             title: '',
@@ -53,9 +66,13 @@ class AddSong extends Component
         console.log('Song added:', newSong);
     
         // Here we could add the new song to a local state, database, etc.
-        this.setState((prevState) => ({
-          songs: [...prevState.songs, newSong]
-        }));
+        // this.setState((prevState) => ({
+        //   songs: [...prevState.songs, newSong]
+        // }));
+        if (this.props.onAddSong) 
+        {
+            this.props.onAddSong(newSong);
+        }
       };
 
     render() {
@@ -95,4 +112,4 @@ class AddSong extends Component
     }
 }
 
-export default AddSong;
+export default AddSongToWebsite;
