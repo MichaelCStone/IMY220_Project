@@ -12,11 +12,11 @@ var app = (0, _express["default"])();
 app.use(_express["default"]["static"](_path["default"].join(__dirname, "../../frontend/public")));
 
 //PORT TO LISTEN TO
-app.listen(process.env.PORT, function () {
-  console.log("Listening on http://localhost:".concat(process.env.PORT));
-});
+// app.listen(process.env.PORT, () => {
+//     console.log(`Listening on http://localhost:${process.env.PORT}`);
+// });
 
 //Original without docker
-// app.listen(3000, () => {
-//     console.log("Listening on http://localhost:3000");
-// });
+app.listen(3000, function () {
+  console.log("Listening on http://localhost:3000");
+});
