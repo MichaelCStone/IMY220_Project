@@ -21,6 +21,7 @@ class App extends Component {
 
       playlists: [
         {
+          id: '1',
           name: 'Chill Vibes',
           picture: 'https://example.com/chill_vibes.jpg',
           genre: 'Lo-Fi',
@@ -39,6 +40,7 @@ class App extends Component {
           ]
         },
         {
+          id: '2',
           name: 'Workout Hits',
           picture: 'https://example.com/workout_hits.jpg',
           genre: 'Pop',
@@ -92,7 +94,10 @@ class App extends Component {
           <Route path="/" element={<SplashPage />} />
           <Route path="/home" element={<HomePage songs={this.state.songs} playlists={this.state.playlists} onAddSong={this.addSong} />} />
           <Route path="/playlist" element={<PlaylistPage playlist={playlists[0]} songs={songs} />} />
+          {/* <Route path="/playlist/:id" element={<PlaylistPage playlist={playlists[0]} songs={songs} />} /> */}
+          {/* <Route path="/playlist/:id" element={<PlaylistPage playlists={playlists} songs={songs} />} /> */}
           <Route path="/profile" element={<ProfilePage profile={profile} playlists={playlists} followers={followers} following={following} />} />
+          {/* <Route path="/profile/:id" element={<ProfilePage profile={profile} playlists={playlists} followers={followers} following={following} />} /> */}
         </Routes>
       </Router>
     );

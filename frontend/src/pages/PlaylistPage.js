@@ -76,6 +76,10 @@ class PlaylistPage extends Component
   {
     const { playlist, songs, isAddingSong, isEditing } = this.state;
 
+    // const { playlists, songs, isAddingSong, isEditing } = this.state;
+    // const { id } = useParams();
+    // const playlist = playlists.find(playlist => playlist.id === id);
+
     return (
       <div>
         <h1>Playlist Page!</h1>
