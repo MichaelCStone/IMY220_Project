@@ -22,4 +22,5 @@ app.get('*', function (req, res) {
 //Original without docker
 app.listen(3000, function () {
   console.log("Listening on http://localhost:3000");
+  console.log("Listening on http://localhost:3000/home");
 });
