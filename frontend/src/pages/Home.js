@@ -14,6 +14,8 @@ class Home extends Component
     return (
       <div>
         <h1>Hello Home Page</h1>
+
+        <Navigation />
         
         <h2>Songs</h2>
         <SongFeed songs={songs} onAddSong={onAddSong} />
