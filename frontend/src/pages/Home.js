@@ -1,23 +1,28 @@
 // u21497682 - Michael Stone
-import React from 'react';
+import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import Navigation from "../components/General/Navigation"
 import SongFeed from '../components/Home/SongFeed';
 import PlaylistFeed from '../components/Home/PlaylistFeed';
 
-const Home = () => {
-  return (
-    <div>
-      <h1>Hello Home Page!</h1>
-      <Navigation />
+class Home extends Component 
+{
+  render() 
+  {
+    const { songs, playlists, onAddSong } = this.props;
+
+    return (
       <div>
-        <SongFeed />
+        <h1>Hello Home Page</h1>
+        
+        <h2>Songs</h2>
+        <SongFeed songs={songs} onAddSong={onAddSong} />
+
+        <h2>Playlists</h2>
+        <PlaylistFeed playlists={playlists} />
       </div>
-      <div>
-        <PlaylistFeed />
-      </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default Home;

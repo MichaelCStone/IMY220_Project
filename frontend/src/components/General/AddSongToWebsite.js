@@ -13,7 +13,6 @@ class AddSongToWebsite extends Component
             album: '',
             genre: '',
             year: ''
-            // songs: []
         };
     }
 
@@ -24,11 +23,6 @@ class AddSongToWebsite extends Component
     handleSubmit = (event) => {
         event.preventDefault();
 
-        // if (this.props.onSave)
-        // {
-        //     this.props.onSave(this.state);
-        // }
-
         const newSong = {
             title: this.state.title,
             artist: this.state.artist,
@@ -36,8 +30,6 @@ class AddSongToWebsite extends Component
             genre: this.state.genre,
             year: this.state.year
         };
-
-        // this.onSave();
 
         if (this.props.onSave) 
         {
@@ -52,28 +44,6 @@ class AddSongToWebsite extends Component
             year: ''
         });
     }
-
-    onSave = () => {
-        const newSong = {
-          title: this.state.title,
-          artist: this.state.artist,
-          album: this.state.album,
-          genre: this.state.genre,
-          year: this.state.year
-        };
-    
-        // You can log or handle the song in any way you want
-        console.log('Song added:', newSong);
-    
-        // Here we could add the new song to a local state, database, etc.
-        // this.setState((prevState) => ({
-        //   songs: [...prevState.songs, newSong]
-        // }));
-        if (this.props.onAddSong) 
-        {
-            this.props.onAddSong(newSong);
-        }
-      };
 
     render() {
         return (
