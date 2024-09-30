@@ -9,6 +9,7 @@ class SignUpForm extends Component
 
     this.state = {
       username: '',
+      email: '',
       password: '',
       confirmPassword: '',
       name: '',
@@ -45,10 +46,9 @@ class SignUpForm extends Component
         errors.username = value.length < 6 ? 'Username must be at least 6 characters long' : '';
         break;
 
-      // case 'email':
-      //   // Simple email pattern check
-      //   errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? '' : 'Email is not valid';
-      //   break;
+      case 'email':
+        errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? '' : 'Email is not valid';
+        break;
 
       case 'password':
         errors.password = value.length < 8 ? 'Password must be at least 8 characters long' : '';
@@ -120,47 +120,104 @@ class SignUpForm extends Component
   //   }
   // };
 
-  handleSubmit = (event) => {
+  // handleSubmit = (event) => {
+  //   event.preventDefault();
+
+  //   const { username, password, confirmPassword, name, bio, country, errors } = this.state;
+
+  //   // Check if form is valid
+  //   if (
+  //     username.length >= 6 &&
+  //     password.length >= 8 &&
+  //     password === confirmPassword &&
+  //     name.trim() !== '' &&
+  //     country.trim() !== '' &&
+  //     !errors.username &&
+  //     !errors.password &&
+  //     !errors.confirmPassword &&
+  //     !errors.name &&
+  //     !errors.bio &&
+  //     !errors.country
+  //   ) {
+  //     console.log('Sign-up details:', { username, password, name, bio, country, profilePicture }); // Implement actual handling for sign-up
+
+  //     // Clear the form
+  //     this.setState({
+  //       username: '',
+  //       password: '',
+  //       confirmPassword: '',
+  //       name: '',
+  //       bio: '',
+  //       country: '',
+  //       profilePicture: null,
+  //       errors: {
+  //         username: '',
+  //         password: '',
+  //         confirmPassword: '',
+  //         name: '',
+  //         bio: '',
+  //         country: ''
+  //       }
+  //     });
+  //   } else {
+  //     alert('Please correct the errors before submitting.');
+  //   }
+  // };
+
+  handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { username, password, confirmPassword, name, bio, country, errors } = this.state;
+    const { username, email, password, name, bio, country, profilePicture, errors } = this.state;
 
     // Check if form is valid
-    if (
-      username.length >= 6 &&
-      password.length >= 8 &&
-      password === confirmPassword &&
-      name.trim() !== '' &&
-      country.trim() !== '' &&
-      !errors.username &&
-      !errors.password &&
-      !errors.confirmPassword &&
-      !errors.name &&
-      !errors.bio &&
-      !errors.country
-    ) {
-      console.log('Sign-up details:', { username, password, name, bio, country, profilePicture }); // Implement actual handling for sign-up
+    if (username.length >= 6 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && password.length >= 8) 
+    {
+        if (!errors.username && !errors.email && !errors.password) 
+        {
+            try 
+            {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        password,
+                        name,
+                        bio,
+                        country,
+                        profilePicture,
+                    }),
+                });
 
-      // Clear the form
-      this.setState({
-        username: '',
-        password: '',
-        confirmPassword: '',
-        name: '',
-        bio: '',
-        country: '',
-        profilePicture: null,
-        errors: {
-          username: '',
-          password: '',
-          confirmPassword: '',
-          name: '',
-          bio: '',
-          country: ''
+                const data = await response.json();
+
+                if (response.ok) 
+                {
+                    console.log('Sign-up successful:', data);
+                    // Optionally redirect to another page or clear the form
+                } 
+                else 
+                {
+                    alert(data.error); // Display the error from the API
+                }
+            } 
+            catch (error) 
+            {
+                console.error('Error during sign-up:', error);
+                alert('An error occurred while signing up.');
+            }
+        } 
+        else 
+        {
+            alert('Please correct the errors before submitting.');
         }
-      });
-    } else {
-      alert('Please correct the errors before submitting.');
+    } 
+    else 
+    {
+        alert('Please correct the errors before submitting.');
     }
   };
 
@@ -203,7 +260,7 @@ class SignUpForm extends Component
   // }
 
   render() {
-    const { username, password, confirmPassword, name, bio, country, profilePicture, errors } = this.state;
+    const { username, email, password, confirmPassword, name, bio, country, profilePicture, errors } = this.state;
 
     return (
       <div className="signup-form">
@@ -213,6 +270,12 @@ class SignUpForm extends Component
             <label>Username:</label>
             <input type="text" name="username" value={username} onChange={this.handleChange} required />
             {errors.username && <span className="error">{errors.username}</span>}
+          </div>
+
+          <div>
+            <label>Email:</label>
+            <input type="email" name="email" value={email} onChange={this.handleChange} required />
+            {errors.email && <span className="error">{errors.email}</span>}
           </div>
 
           <div>
