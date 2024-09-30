@@ -12,29 +12,7 @@ function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; } // Michael Stone - u21497682
 var router = _express["default"].Router();
 
-// Get all songs
-// router.get('/songs', async (req, res) => {
-//     const songsCollection = req.app.locals.songsCollection;
-//     try {
-//         const songs = await songsCollection.find({}).toArray();
-//         res.json(songs);
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// });
-
-// Create a new song
-// router.post('/songs', async (req, res) => {
-//     const songsCollection = req.app.locals.songsCollection;
-//     try {
-//         const newSong = req.body;
-//         const result = await songsCollection.insertOne(newSong);
-//         res.status(201).json(result.ops[0]);
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// });
-
+//login a user
 router.post('/login', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
     var _req$body, username, password, userProfile;
@@ -189,6 +167,108 @@ router.post('/signup', /*#__PURE__*/function () {
   }));
   return function (_x3, _x4) {
     return _ref2.apply(this, arguments);
+  };
+}());
+
+//Get all songs
+router.get('/songs', /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req, res) {
+    var songs;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.prev = 0;
+          _context3.next = 3;
+          return req.app.locals.songsCollection.find({}).toArray();
+        case 3:
+          songs = _context3.sent;
+          res.json(songs);
+          _context3.next = 10;
+          break;
+        case 7:
+          _context3.prev = 7;
+          _context3.t0 = _context3["catch"](0);
+          res.status(500).send(_context3.t0.message);
+        case 10:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[0, 7]]);
+  }));
+  return function (_x5, _x6) {
+    return _ref3.apply(this, arguments);
+  };
+}());
+
+//Get all playlists
+router.get('/playlists', /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
+    var playlists;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.prev = 0;
+          _context4.next = 3;
+          return req.app.locals.playlistsCollection.find({}).toArray();
+        case 3:
+          playlists = _context4.sent;
+          res.json(playlists);
+          _context4.next = 10;
+          break;
+        case 7:
+          _context4.prev = 7;
+          _context4.t0 = _context4["catch"](0);
+          res.status(500).send(_context4.t0.message);
+        case 10:
+        case "end":
+          return _context4.stop();
+      }
+    }, _callee4, null, [[0, 7]]);
+  }));
+  return function (_x7, _x8) {
+    return _ref4.apply(this, arguments);
+  };
+}());
+
+//Get a user's profile
+router.get('/profiles/:username', /*#__PURE__*/function () {
+  var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(req, res) {
+    var username, profile;
+    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          username = req.params.username;
+          _context5.prev = 1;
+          _context5.next = 4;
+          return req.app.locals.profilesCollection.findOne({
+            username: username
+          });
+        case 4:
+          profile = _context5.sent;
+          if (profile) {
+            _context5.next = 7;
+            break;
+          }
+          return _context5.abrupt("return", res.status(404).json({
+            message: 'User not found'
+          }));
+        case 7:
+          return _context5.abrupt("return", res.status(200).json(profile));
+        case 10:
+          _context5.prev = 10;
+          _context5.t0 = _context5["catch"](1);
+          console.error('Error fetching user:', _context5.t0);
+          return _context5.abrupt("return", res.status(500).json({
+            message: 'Server error'
+          }));
+        case 14:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5, null, [[1, 10]]);
+  }));
+  return function (_x9, _x10) {
+    return _ref5.apply(this, arguments);
   };
 }());
 var _default = exports["default"] = router;

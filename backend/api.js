@@ -3,30 +3,7 @@ import express from 'express';
 
 const router = express.Router();
 
-// Get all songs
-// router.get('/songs', async (req, res) => {
-//     const songsCollection = req.app.locals.songsCollection;
-//     try {
-//         const songs = await songsCollection.find({}).toArray();
-//         res.json(songs);
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// });
-
-// Create a new song
-// router.post('/songs', async (req, res) => {
-//     const songsCollection = req.app.locals.songsCollection;
-//     try {
-//         const newSong = req.body;
-//         const result = await songsCollection.insertOne(newSong);
-//         res.status(201).json(result.ops[0]);
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// });
-
-
+//login a user
 router.post('/login', async (req, res) => {
 
     const { username, password } = req.body;
@@ -82,7 +59,6 @@ router.post('/login', async (req, res) => {
         });
     }
 });
-
 
 //creating a new user
 router.post('/signup', async (req, res) => {
@@ -145,6 +121,62 @@ router.post('/signup', async (req, res) => {
             status: 'error',
             message: 'Profile creation failed'
         });
+    }
+});
+
+//Get all songs
+router.get('/songs', async (req, res) => {
+    // const songsCollection = req.app.locals.songsCollection;
+
+    try 
+    {
+        const songs = await req.app.locals.songsCollection.find({}).toArray();
+
+        res.json(songs);
+    } 
+    catch (error) 
+    {
+        res.status(500).send(error.message);
+    }
+});
+
+//Get all playlists
+router.get('/playlists', async (req, res) => {
+    // const songsCollection = req.app.locals.songsCollection;
+
+    try 
+    {
+        const playlists = await req.app.locals.playlistsCollection.find({}).toArray();
+
+        res.json(playlists);
+    } 
+    catch (error) 
+    {
+        res.status(500).send(error.message);
+    }
+});
+
+//Get a user's profile
+router.get('/profiles/:username', async (req, res) => {
+
+    const username = req.params.username;
+
+    try 
+    {
+        // const user = await User.findOne({ username: username }).select('-password'); // Exclude password for security
+        const profile = await req.app.locals.profilesCollection.findOne({ username: username });
+
+        if (!profile) 
+        {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json(profile);
+    } 
+    catch (error) 
+    {
+        console.error('Error fetching user:', error);
+        return res.status(500).json({ message: 'Server error' });
     }
 });
 
