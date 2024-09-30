@@ -5,6 +5,8 @@ import HomePage from './pages/HomePage';
 import SplashPage from './pages/SplashPage';
 import PlaylistPage from './pages/PlaylistPage';
 import ProfilePage from './pages/ProfilePage';
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
 
 class App extends Component {
   constructor(props) {
@@ -92,6 +94,8 @@ class App extends Component {
       <Router>
         <Routes>
           <Route path="/" element={<SplashPage />} />
+          <Route path="/login" element={<LoginPage/>} />
+          <Route path="/signup" element={<SignUpPage/>} />
           <Route path="/home" element={<HomePage songs={this.state.songs} playlists={this.state.playlists} onAddSong={this.addSong} />} />
           <Route path="/playlist" element={<PlaylistPage playlist={playlists[0]} songs={songs} />} />
           {/* <Route path="/playlist/:id" element={<PlaylistPage playlist={playlists[0]} songs={songs} />} /> */}

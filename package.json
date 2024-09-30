@@ -4,7 +4,7 @@
   "description": "This project consists of creating a Playlist Sharing Website using web technologies that I've been taught in the module IMY220",
   "main": "frontend/src/index.js",
   "scripts": {
-    "build": "webpack && babel backend/server.js -d backend/dist",
+    "build": "webpack && babel backend/server.js backend/api.js -d backend/dist",
     "start": "npm run build && node backend/dist/server.js"
   },
   "author": "",

@@ -1,0 +1,5 @@
+1. Had to chnage the build and start when adding the api.js file. Below is the original before:
+----------------------------------------------------------------------------------------------
+"build": "webpack && babel backend/server.js -d backend/dist",
+"start": "npm run build && node backend/dist/server.js"
+---------------------------------------------------------------------------------------------
