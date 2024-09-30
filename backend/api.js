@@ -1,5 +1,6 @@
 // Michael Stone - u21497682
 import express from 'express';
+import { ReturnDocument } from 'mongodb';
 
 const router = express.Router();
 
@@ -177,6 +178,148 @@ router.get('/profiles/:username', async (req, res) => {
     {
         console.error('Error fetching user:', error);
         return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+//update a user's profile
+router.put('/profiles/:username', async (req, res) => {
+
+    const username = req.params.username;
+    const updatedProfileData = req.body;
+
+    try 
+    {
+        // Find the user by username and update their profile
+        const updatedUser = await req.app.locals.profilesCollection.findOneAndUpdate(
+            { username: username },
+            { $set: updatedProfileData },
+            { returnDocument: "after" }
+        ); //.select('-password'); // Exclude password
+
+        if (!updatedUser) 
+        {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json(updatedUser);
+    } 
+    catch (error) 
+    {
+        console.error('Error updating user profile:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+//View a specific playlist
+router.get('/playlists/:playlistId', async (req, res) => {
+
+    const playlistId = parseInt(req.params.playlistId);
+
+    try 
+    {
+        // Find the playlist by its ID
+        const playlist = await req.app.locals.playlistsCollection.findOne({ simpleId: playlistId });
+
+        if (!playlist) 
+        {
+            return res.status(404).json({ message: 'Playlist not found' });
+        }
+
+        // Return the playlist details
+        return res.status(200).json(playlist);
+    } 
+    catch (error) 
+    {
+        console.error('Error fetching playlist:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+//Add follower to my following list
+router.post('/follow/:usernameToFollow', async (req, res) => {
+    const followerUsername = req.body.username; // The user who wants to follow
+    const usernameToFollow = req.params.usernameToFollow;
+
+    try 
+    {
+        const followerUser = await req.app.locals.profilesCollection.findOne({ username: followerUsername });
+
+        const userToFollow = await req.app.locals.profilesCollection.findOne({ username: usernameToFollow });
+
+        if (!followerUser || !userToFollow) 
+        {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (followerUser.following.includes(usernameToFollow)) 
+        {
+            return res.status(400).json({ message: 'You are already following this user' });
+        }
+
+        // Add the username to the follower's following list
+        await req.app.locals.profilesCollection.updateOne(
+            { username: followerUsername },
+            { $addToSet: { following: usernameToFollow } } // $addToSet prevents duplicates
+        );
+
+        //add follower's username to the user who is being followed?
+        await req.app.locals.profilesCollection.updateOne(
+            { username: usernameToFollow },
+            { $addToSet: { followers: followerUsername } }
+        );
+
+        return res.status(200).json({ message: `${followerUsername} is now following ${usernameToFollow}` });
+    } 
+    catch (error) 
+    {
+        console.error('Error following user:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+//unfollow a user
+router.delete('/unfollow/:username', async (req, res) => {
+    const usernameToUnfollow = req.params.username;
+    const currentUser = req.body.username;
+
+    try 
+    {
+        const user = await req.app.locals.profilesCollection.findOne({ username: currentUser });
+        // console.log(user);
+
+        const userToUnfollow = await req.app.locals.profilesCollection.findOne({ username: usernameToUnfollow });
+        // console.log(userToUnfollow);
+
+        if (!user || !userToUnfollow) 
+        {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (!user.following.includes(usernameToUnfollow)) 
+        {
+            return res.status(400).json({ message: 'You are not following this user' });
+        }
+
+        user.following = user.following.filter(username => username !== usernameToUnfollow);
+
+        userToUnfollow.followers = userToUnfollow.followers.filter(username => username !== currentUser);
+
+        await req.app.locals.profilesCollection.updateOne(
+            { username: currentUser },
+            { $set: { following: user.following } }
+        );
+
+        await req.app.locals.profilesCollection.updateOne(
+            { username: usernameToUnfollow },
+            { $set: { followers: userToUnfollow.followers } }
+        );
+
+        return res.status(200).json({ message: `${currentUser} has unfollowed ${usernameToUnfollow}` });
+    } 
+    catch (error) 
+    {
+        console.error('Error unfollowing user:', error);
+        return res.status(500).json({ message: 'An error occurred while trying to unfollow' });
     }
 });
 
