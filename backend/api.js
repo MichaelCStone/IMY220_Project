@@ -323,4 +323,37 @@ router.delete('/unfollow/:username', async (req, res) => {
     }
 });
 
+//Create a new Song
+router.post('/addSong', async (req, res) => {
+
+    try 
+    {
+        const { title, artist, album, genre, year, spotifyLink } = req.body;
+        const songsCollection = req.app.locals.songsCollection;
+
+        const songCount = await songsCollection.countDocuments();
+
+        const newSong = {
+            simpleId: songCount + 1,
+            title,
+            artist,
+            album,
+            genre,
+            year,
+            spotifyLink
+        };
+
+        await songsCollection.insertOne(newSong);
+
+        res.status(201).json({ message: 'Song added successfully', newSong });
+    }
+    catch (error) 
+    {
+        console.error('Error unfollowing user:', error);
+        res.status(500).json({ message: 'Error adding song', error });
+    }
+});
+
+
+
 export default router;

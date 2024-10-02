@@ -478,16 +478,12 @@ router["delete"]('/unfollow/:username', /*#__PURE__*/function () {
             message: 'You are not following this user'
           }));
         case 13:
-          // Remove the user from the following list
           user.following = user.following.filter(function (username) {
             return username !== usernameToUnfollow;
           });
-          // Remove the current user from the followers list of the user being unfollowed
           userToUnfollow.followers = userToUnfollow.followers.filter(function (username) {
             return username !== currentUser;
           });
-
-          // Update the following list in the database
           _context9.next = 17;
           return req.app.locals.profilesCollection.updateOne({
             username: currentUser
@@ -524,6 +520,55 @@ router["delete"]('/unfollow/:username', /*#__PURE__*/function () {
   }));
   return function (_x17, _x18) {
     return _ref9.apply(this, arguments);
+  };
+}());
+router.post('/addSong', /*#__PURE__*/function () {
+  var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10(req, res) {
+    var _req$body3, title, artist, album, genre, year, spotifyLink, songsCollection, songCount, newSong;
+    return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+      while (1) switch (_context10.prev = _context10.next) {
+        case 0:
+          _context10.prev = 0;
+          _req$body3 = req.body, title = _req$body3.title, artist = _req$body3.artist, album = _req$body3.album, genre = _req$body3.genre, year = _req$body3.year, spotifyLink = _req$body3.spotifyLink;
+          songsCollection = req.app.locals.songsCollection;
+          _context10.next = 5;
+          return songsCollection.countDocuments();
+        case 5:
+          songCount = _context10.sent;
+          newSong = {
+            simpleId: songCount + 1,
+            title: title,
+            artist: artist,
+            album: album,
+            genre: genre,
+            year: year,
+            spotifyLink: spotifyLink
+          };
+          _context10.next = 9;
+          return songsCollection.insertOne(newSong);
+        case 9:
+          res.status(201).json({
+            message: 'Song added successfully',
+            newSong: newSong
+          });
+          _context10.next = 16;
+          break;
+        case 12:
+          _context10.prev = 12;
+          _context10.t0 = _context10["catch"](0);
+          console.error('Error unfollowing user:', _context10.t0);
+          res.status(500).json({
+            message: 'Error adding song',
+            error: _context10.t0
+          });
+        case 16:
+        case "end":
+          return _context10.stop();
+      }
+    }, _callee10, null, [[0, 12]]);
+  }));
+  return function (_x19, _x20) {
+    return _ref10.apply(this, arguments);
   };
 }());
 var _default = exports["default"] = router;
