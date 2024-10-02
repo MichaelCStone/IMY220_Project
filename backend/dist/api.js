@@ -522,6 +522,8 @@ router["delete"]('/unfollow/:username', /*#__PURE__*/function () {
     return _ref9.apply(this, arguments);
   };
 }());
+
+//Create a new Song
 router.post('/addSong', /*#__PURE__*/function () {
   var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10(req, res) {
     var _req$body3, title, artist, album, genre, year, spotifyLink, songsCollection, songCount, newSong;
@@ -569,6 +571,250 @@ router.post('/addSong', /*#__PURE__*/function () {
   }));
   return function (_x19, _x20) {
     return _ref10.apply(this, arguments);
+  };
+}());
+
+//Add a new playlist
+router.post('/addPlaylist', /*#__PURE__*/function () {
+  var _ref11 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee11(req, res) {
+    var playlistsCollection, profilesCollection, _req$body4, name, picture, genre, author, category, hashtags, comments, description, songs, ownerId, validatedHashtags, validatedComments, validatedSongs, newSimpleId, newPlaylist, result, updateResult;
+    return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+      while (1) switch (_context11.prev = _context11.next) {
+        case 0:
+          _context11.prev = 0;
+          playlistsCollection = req.app.locals.playlistsCollection;
+          profilesCollection = req.app.locals.profilesCollection;
+          _req$body4 = req.body, name = _req$body4.name, picture = _req$body4.picture, genre = _req$body4.genre, author = _req$body4.author, category = _req$body4.category, hashtags = _req$body4.hashtags, comments = _req$body4.comments, description = _req$body4.description, songs = _req$body4.songs, ownerId = _req$body4.ownerId; // Ensure the fields are arrays (default to empty arrays if missing)
+          validatedHashtags = hashtags || [];
+          validatedComments = comments || [];
+          validatedSongs = songs || []; // Validate required fields (example)
+          if (!(!name || !ownerId || !Array.isArray(validatedSongs))) {
+            _context11.next = 9;
+            break;
+          }
+          return _context11.abrupt("return", res.status(400).json({
+            message: 'Missing required fields or invalid data'
+          }));
+        case 9:
+          _context11.next = 11;
+          return playlistsCollection.countDocuments();
+        case 11:
+          _context11.t0 = _context11.sent;
+          newSimpleId = _context11.t0 + 1;
+          newPlaylist = {
+            simpleId: newSimpleId,
+            name: name,
+            picture: picture,
+            genre: genre,
+            author: author,
+            category: category,
+            hashtags: validatedHashtags,
+            comments: validatedComments,
+            description: description,
+            songs: validatedSongs,
+            ownerId: ownerId
+          };
+          _context11.next = 16;
+          return playlistsCollection.insertOne(newPlaylist);
+        case 16:
+          result = _context11.sent;
+          if (!result.acknowledged) {
+            _context11.next = 24;
+            break;
+          }
+          _context11.next = 20;
+          return profilesCollection.updateOne({
+            simpleId: ownerId
+          },
+          // Assuming ownerId is the _id of the profile
+          {
+            $addToSet: {
+              playlists: newSimpleId
+            }
+          } // Add the new playlist's simpleId
+          );
+        case 20:
+          updateResult = _context11.sent;
+          if (updateResult.modifiedCount === 1) {
+            res.status(201).json({
+              message: 'Playlist created successfully',
+              playlist: newPlaylist
+            });
+          } else {
+            // If the profile was not updated, return a warning
+            res.status(200).json({
+              message: 'Playlist created, but owners playlists not updated',
+              playlist: newPlaylist
+            });
+          }
+          _context11.next = 25;
+          break;
+        case 24:
+          throw new Error('Failed to create playlist');
+        case 25:
+          _context11.next = 31;
+          break;
+        case 27:
+          _context11.prev = 27;
+          _context11.t1 = _context11["catch"](0);
+          console.error('Error adding playlist:', _context11.t1);
+          res.status(500).json({
+            message: 'Error adding playlist',
+            error: _context11.t1.message
+          });
+        case 31:
+        case "end":
+          return _context11.stop();
+      }
+    }, _callee11, null, [[0, 27]]);
+  }));
+  return function (_x21, _x22) {
+    return _ref11.apply(this, arguments);
+  };
+}());
+
+//Get all playlists of a specific profile
+router.get('/playlists/user/:songId', /*#__PURE__*/function () {
+  var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee12(req, res) {
+    var ownerId, profilePlaylists;
+    return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+      while (1) switch (_context12.prev = _context12.next) {
+        case 0:
+          _context12.prev = 0;
+          ownerId = req.params.ownerId;
+          _context12.next = 4;
+          return req.app.locals.playlistsCollection.find({
+            ownerId: parseInt(ownerId)
+          }).toArray();
+        case 4:
+          profilePlaylists = _context12.sent;
+          if (!(profilePlaylists.length === 0)) {
+            _context12.next = 7;
+            break;
+          }
+          return _context12.abrupt("return", res.status(404).json({
+            message: 'No playlists found for this user'
+          }));
+        case 7:
+          // Return the playlists in the response
+          res.json(profilePlaylists);
+          _context12.next = 14;
+          break;
+        case 10:
+          _context12.prev = 10;
+          _context12.t0 = _context12["catch"](0);
+          console.error('Error fetching playlists for user:', _context12.t0);
+          res.status(500).json({
+            message: 'Error fetching playlists',
+            error: _context12.t0.message
+          });
+        case 14:
+        case "end":
+          return _context12.stop();
+      }
+    }, _callee12, null, [[0, 10]]);
+  }));
+  return function (_x23, _x24) {
+    return _ref12.apply(this, arguments);
+  };
+}());
+
+//delete a song
+router["delete"]('/songs/:songId', /*#__PURE__*/function () {
+  var _ref13 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee13(req, res) {
+    var songId, result;
+    return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+      while (1) switch (_context13.prev = _context13.next) {
+        case 0:
+          _context13.prev = 0;
+          songId = parseInt(req.params.songId, 10); // console.log('Attempting to delete song with simpleId:', songId);
+          _context13.next = 4;
+          return req.app.locals.songsCollection.findOneAndDelete({
+            simpleId: songId
+          });
+        case 4:
+          result = _context13.sent;
+          if (result) {
+            _context13.next = 7;
+            break;
+          }
+          return _context13.abrupt("return", res.status(404).json({
+            message: "Song not found"
+          }));
+        case 7:
+          res.status(200).json({
+            message: "Song deleted successfully"
+          });
+          _context13.next = 14;
+          break;
+        case 10:
+          _context13.prev = 10;
+          _context13.t0 = _context13["catch"](0);
+          console.error('Error deleting song:', _context13.t0);
+          res.status(500).json({
+            message: 'Error deleting song',
+            error: _context13.t0.message
+          });
+        case 14:
+        case "end":
+          return _context13.stop();
+      }
+    }, _callee13, null, [[0, 10]]);
+  }));
+  return function (_x25, _x26) {
+    return _ref13.apply(this, arguments);
+  };
+}());
+
+//Delte my profile (and all of my playlists as well)
+router["delete"]('/profiles/:simpleId', /*#__PURE__*/function () {
+  var _ref14 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee14(req, res) {
+    var simpleId, result;
+    return _regeneratorRuntime().wrap(function _callee14$(_context14) {
+      while (1) switch (_context14.prev = _context14.next) {
+        case 0:
+          simpleId = parseInt(req.params.simpleId, 10);
+          _context14.prev = 1;
+          _context14.next = 4;
+          return req.app.locals.playlistsCollection.deleteMany({
+            ownerId: simpleId
+          });
+        case 4:
+          _context14.next = 6;
+          return req.app.locals.profilesCollection.findOneAndDelete({
+            simpleId: simpleId
+          });
+        case 6:
+          result = _context14.sent;
+          if (result) {
+            _context14.next = 9;
+            break;
+          }
+          return _context14.abrupt("return", res.status(404).json({
+            message: "Profile not found"
+          }));
+        case 9:
+          res.status(200).json({
+            message: "Profile and associated playlists deleted successfully"
+          });
+          _context14.next = 16;
+          break;
+        case 12:
+          _context14.prev = 12;
+          _context14.t0 = _context14["catch"](1);
+          console.error('Error deleting profile and playlists:', _context14.t0);
+          res.status(500).json({
+            message: 'Error deleting profile and playlists',
+            error: _context14.t0.message
+          });
+        case 16:
+        case "end":
+          return _context14.stop();
+      }
+    }, _callee14, null, [[1, 12]]);
+  }));
+  return function (_x27, _x28) {
+    return _ref14.apply(this, arguments);
   };
 }());
 var _default = exports["default"] = router;

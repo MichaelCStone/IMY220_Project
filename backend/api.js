@@ -354,6 +354,157 @@ router.post('/addSong', async (req, res) => {
     }
 });
 
+//Add a new playlist
+router.post('/addPlaylist', async (req, res) => {
+    try 
+    {
+        const playlistsCollection = req.app.locals.playlistsCollection;
+        const profilesCollection = req.app.locals.profilesCollection;
+        const { name, picture, genre, author, category, hashtags, comments, description, songs, ownerId } = req.body;
+        
+        // Ensure the fields are arrays (default to empty arrays if missing)
+        const validatedHashtags = hashtags || [];
+        const validatedComments = comments || [];
+        const validatedSongs = songs || [];
 
+        // Validate required fields (example)
+        if (!name || !ownerId || !Array.isArray(validatedSongs)) {
+            return res.status(400).json({ message: 'Missing required fields or invalid data' });
+        }
+
+        const newSimpleId = (await playlistsCollection.countDocuments()) + 1;
+
+        const newPlaylist = {
+            simpleId: newSimpleId,
+            name,
+            picture,
+            genre,
+            author,
+            category,
+            hashtags: validatedHashtags,
+            comments: validatedComments,
+            description,
+            songs: validatedSongs,
+            ownerId,
+        };
+
+        const result = await playlistsCollection.insertOne(newPlaylist); // insert into DB
+
+        if (result.acknowledged) 
+        {
+            // Update the owner's profile to include the new playlist's simpleId
+            const updateResult = await profilesCollection.updateOne(
+                { simpleId: ownerId }, // Assuming ownerId is the _id of the profile
+                { $addToSet: { playlists: newSimpleId } } // Add the new playlist's simpleId
+            );
+
+            if (updateResult.modifiedCount === 1) 
+            {
+                res.status(201).json({ message: 'Playlist created successfully', playlist: newPlaylist });
+            } 
+            else 
+            {
+                // If the profile was not updated, return a warning
+                res.status(200).json({ message: 'Playlist created, but owners playlists not updated', playlist: newPlaylist });
+            }
+        } 
+        else 
+        {
+            throw new Error('Failed to create playlist');
+        }
+
+    } catch (error) {
+        console.error('Error adding playlist:', error);
+        res.status(500).json({ message: 'Error adding playlist', error: error.message });
+    }
+});
+
+//Get all playlists of a specific profile
+router.get('/playlists/user/:songId', async (req, res) => {
+    
+    try 
+    {
+        const { ownerId } = req.params;
+        const profilePlaylists = await req.app.locals.playlistsCollection.find({ ownerId: parseInt(ownerId) }).toArray();
+
+        if (profilePlaylists.length === 0) 
+        {
+            return res.status(404).json({
+                message: 'No playlists found for this user'
+            });
+        }
+
+        // Return the playlists in the response
+        res.json(profilePlaylists);
+    } 
+    catch (error) 
+    {
+        console.error('Error fetching playlists for user:', error);
+
+        res.status(500).json({
+            message: 'Error fetching playlists',
+            error: error.message
+        });
+    }
+});
+
+//delete a song
+router.delete('/songs/:songId', async (req, res) => {
+    try 
+    {
+        const songId = parseInt(req.params.songId, 10);
+
+        // console.log('Attempting to delete song with simpleId:', songId);
+
+        const result = await req.app.locals.songsCollection.findOneAndDelete({ simpleId: songId });
+
+        if (!result) 
+        {
+            return res.status(404).json({ message: "Song not found" });
+        }
+
+        res.status(200).json({ message: "Song deleted successfully" });
+    } 
+    catch (error) 
+    {
+        console.error('Error deleting song:', error);
+
+        res.status(500).json({
+            message: 'Error deleting song',
+            error: error.message,
+        });
+    }
+});
+
+//Delte my profile (and all of my playlists as well)
+router.delete('/profiles/:simpleId', async (req, res) => {
+
+    const simpleId = parseInt(req.params.simpleId, 10);
+
+    try 
+    {
+        // First, delete the playlists associated with the simpleId
+        await req.app.locals.playlistsCollection.deleteMany({ ownerId: simpleId });
+
+        // Then, delete the profile
+        const result = await req.app.locals.profilesCollection.findOneAndDelete({ simpleId });
+
+        if (!result) 
+        {
+            return res.status(404).json({ message: "Profile not found" });
+        }
+
+        res.status(200).json({ message: "Profile and associated playlists deleted successfully" });
+    } 
+    catch (error) 
+    {
+        console.error('Error deleting profile and playlists:', error);
+
+        res.status(500).json({
+            message: 'Error deleting profile and playlists',
+            error: error.message,
+        });
+    }
+});
 
 export default router;
