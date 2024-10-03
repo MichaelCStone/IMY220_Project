@@ -507,4 +507,122 @@ router.delete('/profiles/:simpleId', async (req, res) => {
     }
 });
 
+//delete specific playlist of my profile
+router.delete('/deletePlaylist/:simpleId/:ownerSimpleId', async (req, res) => {
+
+    try 
+    {
+        const playlistsCollection = req.app.locals.playlistsCollection;
+        const profilesCollection = req.app.locals.profilesCollection;
+
+        const { simpleId, ownerSimpleId } = req.params;
+
+        // Find the playlist by simpleId
+        const playlist = await playlistsCollection.findOne({ simpleId: parseInt(simpleId) });
+
+        // If the playlist does not exist
+        if (!playlist) 
+        {
+            return res.status(404).json({ message: 'Playlist not found' });
+        }
+
+        // Check if the ownerSimpleId matches the playlist's ownerId
+        if (playlist.ownerId !== parseInt(ownerSimpleId)) 
+        {
+            return res.status(403).json({ message: 'You can only delete your own playlists' });
+        }
+
+        // Delete the playlist from the playlistsCollection
+        const deleteResult = await playlistsCollection.deleteOne({ simpleId: parseInt(simpleId) });
+
+        if (deleteResult.deletedCount === 1) 
+        {
+            // Update the owner's profile to remove the deleted playlist's simpleId
+            const updateResult = await profilesCollection.updateOne(
+                { simpleId: parseInt(ownerSimpleId) }, // Match profile by simpleId
+                { $pull: { playlists: parseInt(simpleId) } } // Remove the playlist's simpleId from the profile
+            );
+
+            if (updateResult.modifiedCount === 1) 
+            {
+                return res.status(200).json({ message: 'Playlist deleted successfully' });
+            } 
+            else 
+            {
+                return res.status(200).json({ message: 'Playlist deleted, but owner\'s profile was not updated' });
+            }
+        } 
+        else 
+        {
+            throw new Error('Failed to delete playlist');
+        }
+    } 
+    catch (error) 
+    {
+        console.error('Error deleting playlist:', error);
+
+        res.status(500).json({ message: 'Error deleting playlist', error: error.message });
+    }
+});
+
+//add song to playlist
+router.put('/addSongToPlaylist/:playlistId/:ownerId', async (req, res) => {
+
+    try 
+    {
+        const playlistsCollection = req.app.locals.playlistsCollection;
+        const profilesCollection = req.app.locals.profilesCollection;
+        const { songId } = req.body; // songId comes from the request body
+        const { playlistId, ownerId } = req.params; // playlistId and ownerId come from URL parameters
+
+        // Check if the playlist exists
+        const playlist = await playlistsCollection.findOne({ simpleId: parseInt(playlistId) });
+
+        if (!playlist) 
+        {
+            return res.status(404).json({ message: 'Playlist not found' });
+        }
+
+        // Check if the user is the owner of the playlist
+        if (playlist.ownerId !== parseInt(ownerId)) 
+        {
+            return res.status(403).json({ message: 'You can only modify your own playlists' });
+        }
+
+        // Ensure songId is provided
+        if (!songId) 
+        {
+            return res.status(400).json({ message: 'Missing required songId' });
+        }
+
+        // Check if the song is already in the playlist
+        if (playlist.songs.includes(parseInt(songId)))
+        {
+            return res.status(200).json({ message: 'Song is already in the playlist' });
+        }
+
+        // Add the song to the playlist's songs array
+        const updateResult = await playlistsCollection.updateOne(
+            { simpleId: parseInt(playlistId) }, 
+            { $addToSet: { songs: parseInt(songId) } } // $addToSet prevents duplicates
+        );
+
+        if (updateResult.modifiedCount === 1) 
+        {
+            res.status(200).json({ message: 'Song added to playlist successfully' });
+        } 
+        else 
+        {
+            throw new Error('Failed to add song to playlist');
+        }
+
+    } 
+    catch (error) 
+    {
+        console.error('Error adding song to playlist:', error);
+        
+        res.status(500).json({ message: 'Error adding song to playlist', error: error.message });
+    }
+});
+
 export default router;
