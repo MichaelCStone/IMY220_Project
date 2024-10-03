@@ -1,6 +1,8 @@
 //Michael Stone - u21497682
 import React, { Component } from 'react';
 
+const thePort = 3000;
+
 class SignUpForm extends Component 
 {
   constructor(props) 
@@ -16,6 +18,9 @@ class SignUpForm extends Component
       bio: '',
       country: '',
       profilePicture: null,
+      followers: [],
+      following: [],
+      playlists: [],
       errors: {
         username: '',
         password: '',
@@ -82,92 +87,10 @@ class SignUpForm extends Component
     this.setState({ profilePicture: file });
   };
 
-  // handleSubmit = (event) => {
-  //   event.preventDefault();
-
-  //   // const { username, email, password, confirmPassword, errors } = this.state;
-  //   const { username, password, confirmPassword, name, bio, country, errors } = this.state;
-
-  //   // Check if form is valid
-  //   if (username.length >= 6 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && password.length >= 8 && password === confirmPassword) 
-  //     {
-  //     if (!errors.username && !errors.email && !errors.password && !errors.confirmPassword) 
-  //     {
-  //       console.log('Sign-up details:', { username, email, password }); // need to implement actual implementation
-
-  //       // Clear the form
-  //       this.setState({
-  //         username: '',
-  //         email: '',
-  //         password: '',
-  //         confirmPassword: '',
-  //         errors: {
-  //           username: '',
-  //           email: '',
-  //           password: '',
-  //           confirmPassword: ''
-  //         }
-  //       });
-  //     }
-  //     else 
-  //     {
-  //       alert('Please correct the errors before submitting.');
-  //     }
-  //   }
-  //   else 
-  //   {
-  //     alert('Please correct the errors before submitting.');
-  //   }
-  // };
-
-  // handleSubmit = (event) => {
-  //   event.preventDefault();
-
-  //   const { username, password, confirmPassword, name, bio, country, errors } = this.state;
-
-  //   // Check if form is valid
-  //   if (
-  //     username.length >= 6 &&
-  //     password.length >= 8 &&
-  //     password === confirmPassword &&
-  //     name.trim() !== '' &&
-  //     country.trim() !== '' &&
-  //     !errors.username &&
-  //     !errors.password &&
-  //     !errors.confirmPassword &&
-  //     !errors.name &&
-  //     !errors.bio &&
-  //     !errors.country
-  //   ) {
-  //     console.log('Sign-up details:', { username, password, name, bio, country, profilePicture }); // Implement actual handling for sign-up
-
-  //     // Clear the form
-  //     this.setState({
-  //       username: '',
-  //       password: '',
-  //       confirmPassword: '',
-  //       name: '',
-  //       bio: '',
-  //       country: '',
-  //       profilePicture: null,
-  //       errors: {
-  //         username: '',
-  //         password: '',
-  //         confirmPassword: '',
-  //         name: '',
-  //         bio: '',
-  //         country: ''
-  //       }
-  //     });
-  //   } else {
-  //     alert('Please correct the errors before submitting.');
-  //   }
-  // };
-
   handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { username, email, password, name, bio, country, profilePicture, errors } = this.state;
+    const { username, email, password, name, bio, country, profilePicture, errors, followers, following, playlists } = this.state;
 
     // Check if form is valid
     if (username.length >= 6 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && password.length >= 8) 
@@ -176,7 +99,7 @@ class SignUpForm extends Component
         {
             try 
             {
-                const response = await fetch('/api/signup', {
+                const response = await fetch(`http://localhost:${thePort}/api/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -189,6 +112,9 @@ class SignUpForm extends Component
                         bio,
                         country,
                         profilePicture,
+                        followers,
+                        following,
+                        playlists,
                     }),
                 });
 
@@ -198,6 +124,10 @@ class SignUpForm extends Component
                 {
                     console.log('Sign-up successful:', data);
                     // Optionally redirect to another page or clear the form
+
+                    localStorage.setItem('userProfile', JSON.stringify(data.profile));
+
+                    window.location.href = '/home';
                 } 
                 else 
                 {
@@ -220,44 +150,6 @@ class SignUpForm extends Component
         alert('Please correct the errors before submitting.');
     }
   };
-
-  // render() 
-  // {
-  //   const { username, email, password, confirmPassword, errors } = this.state;
-
-  //   return (
-  //     <div className="signup-form">
-  //       <h2>Sign Up</h2>
-  //       <form onSubmit={this.handleSubmit}>
-  //         <div>
-  //           <label>Username:</label>
-  //           <input type="text" name="username" value={this.state.username} onChange={this.handleChange} required />
-  //           {errors.username && <span className="error">{errors.username}</span>}
-  //         </div>
-
-  //         <div>
-  //           <label>Email:</label>
-  //           <input type="email" name="email" value={this.state.email} onChange={this.handleChange} required />
-  //           {errors.email && <span className="error">{errors.email}</span>}
-  //         </div>
-
-  //         <div>
-  //           <label>Password:</label>
-  //           <input type="password" name="password" value={this.state.password} onChange={this.handleChange} required />
-  //           {errors.password && <span className="error">{errors.password}</span>}
-  //         </div>
-
-  //         <div>
-  //           <label>Confirm Password:</label>
-  //           <input type="password" name="confirmPassword" value={this.state.confirmPassword} onChange={this.handleChange} required />
-  //           {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
-  //         </div>
-
-  //         <button type="submit">Sign Up</button>
-  //       </form>
-  //     </div>
-  //   );
-  // }
 
   render() {
     const { username, email, password, confirmPassword, name, bio, country, profilePicture, errors } = this.state;
