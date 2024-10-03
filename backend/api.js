@@ -640,4 +640,94 @@ router.put('/addSongToPlaylist/:playlistId/:ownerId', async (req, res) => {
     }
 });
 
+//edit a playlist
+router.put('/playlists/:id', async (req, res) => {
+
+    const { id } = req.params;
+    const updates = req.body; // Capture the updates from the request body
+
+    // Prepare the update object
+    const updateData = {};
+
+    // Check for the fields in the request body and add them to updateData
+    if (updates.name) updateData.name = updates.name;
+    if (updates.picture) updateData.picture = updates.picture;
+    if (updates.genre) updateData.genre = updates.genre;
+    if (updates.category) updateData.category = updates.category;
+    if (updates.hashtags) updateData.hashtags = updates.hashtags;
+    if (updates.description) updateData.description = updates.description;
+
+    // If no fields are provided for update, respond with an error
+    if (Object.keys(updateData).length === 0) 
+    {
+        return res.status(400).json({ message: 'No fields to update' });
+    }
+
+    try 
+    {
+        const playlistsCollection = req.app.locals.playlistsCollection;
+
+        // Attempt to find and update the playlist in the database
+        const result = await playlistsCollection.updateOne(
+            { simpleId: parseInt(id) },
+            {
+                $set: updateData // Use the dynamically created updateData object
+            }
+        );
+
+        if (result.matchedCount === 0) 
+        {
+            return res.status(404).json({ message: 'Playlist not found' });
+        }
+
+        res.status(200).json({ message: 'Playlist updated successfully' });
+    } 
+    catch (error) 
+    {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred while updating the playlist' });
+    }
+});
+
+//Add Comment to a playlist
+router.post('/playlists/:id/addComment', async (req, res) => {
+
+    const { id } = req.params; // Get the playlist ID from the URL parameters
+    const { author, content } = req.body; // Get the author and content from the request body
+
+    // Validation to ensure author and content are provided
+    if (!author || !content) 
+    {
+        return res.status(400).json({ message: 'Author and content are required' });
+    }
+
+    try 
+    {
+        const playlistsCollection = req.app.locals.playlistsCollection;
+
+        // Attempt to find and update the playlist in the database
+        const result = await playlistsCollection.updateOne(
+            { simpleId: parseInt(id) }, // Find the playlist by simpleId
+            {
+                $push: {
+                    comments: { author, content } // Push the new comment to the comments array
+                }
+            }
+        );
+
+        if (result.matchedCount === 0) 
+        {
+            return res.status(404).json({ message: 'Playlist not found' });
+        }
+
+        res.status(200).json({ message: 'Comment added successfully' });
+    } 
+    catch (error) 
+    {
+        console.error(error);
+
+        res.status(500).json({ message: 'An error occurred while adding the comment' });
+    }
+});
+
 export default router;

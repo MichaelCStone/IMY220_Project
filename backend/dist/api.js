@@ -1026,4 +1026,138 @@ router.put('/addSongToPlaylist/:playlistId/:ownerId', /*#__PURE__*/function () {
     return _ref16.apply(this, arguments);
   };
 }());
+
+//edit a playlist
+router.put('/playlists/:id', /*#__PURE__*/function () {
+  var _ref17 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee17(req, res) {
+    var id, updates, updateData, playlistsCollection, result;
+    return _regeneratorRuntime().wrap(function _callee17$(_context17) {
+      while (1) switch (_context17.prev = _context17.next) {
+        case 0:
+          id = req.params.id;
+          updates = req.body; // Capture the updates from the request body
+          // Prepare the update object
+          updateData = {}; // Check for the fields in the request body and add them to updateData
+          if (updates.name) updateData.name = updates.name;
+          if (updates.picture) updateData.picture = updates.picture;
+          if (updates.genre) updateData.genre = updates.genre;
+          if (updates.category) updateData.category = updates.category;
+          if (updates.hashtags) updateData.hashtags = updates.hashtags;
+          if (updates.description) updateData.description = updates.description;
+
+          // If no fields are provided for update, respond with an error
+          if (!(Object.keys(updateData).length === 0)) {
+            _context17.next = 11;
+            break;
+          }
+          return _context17.abrupt("return", res.status(400).json({
+            message: 'No fields to update'
+          }));
+        case 11:
+          _context17.prev = 11;
+          playlistsCollection = req.app.locals.playlistsCollection; // Attempt to find and update the playlist in the database
+          _context17.next = 15;
+          return playlistsCollection.updateOne({
+            simpleId: parseInt(id)
+          }, {
+            $set: updateData // Use the dynamically created updateData object
+          });
+        case 15:
+          result = _context17.sent;
+          if (!(result.matchedCount === 0)) {
+            _context17.next = 18;
+            break;
+          }
+          return _context17.abrupt("return", res.status(404).json({
+            message: 'Playlist not found'
+          }));
+        case 18:
+          res.status(200).json({
+            message: 'Playlist updated successfully'
+          });
+          _context17.next = 25;
+          break;
+        case 21:
+          _context17.prev = 21;
+          _context17.t0 = _context17["catch"](11);
+          console.error(_context17.t0);
+          res.status(500).json({
+            message: 'An error occurred while updating the playlist'
+          });
+        case 25:
+        case "end":
+          return _context17.stop();
+      }
+    }, _callee17, null, [[11, 21]]);
+  }));
+  return function (_x33, _x34) {
+    return _ref17.apply(this, arguments);
+  };
+}());
+
+//Add Comment to a playlist
+router.post('/playlists/:id/addComment', /*#__PURE__*/function () {
+  var _ref18 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee18(req, res) {
+    var id, _req$body5, author, content, playlistsCollection, result;
+    return _regeneratorRuntime().wrap(function _callee18$(_context18) {
+      while (1) switch (_context18.prev = _context18.next) {
+        case 0:
+          id = req.params.id; // Get the playlist ID from the URL parameters
+          _req$body5 = req.body, author = _req$body5.author, content = _req$body5.content; // Get the author and content from the request body
+          // Validation to ensure author and content are provided
+          if (!(!author || !content)) {
+            _context18.next = 4;
+            break;
+          }
+          return _context18.abrupt("return", res.status(400).json({
+            message: 'Author and content are required'
+          }));
+        case 4:
+          _context18.prev = 4;
+          playlistsCollection = req.app.locals.playlistsCollection; // Attempt to find and update the playlist in the database
+          _context18.next = 8;
+          return playlistsCollection.updateOne({
+            simpleId: parseInt(id)
+          },
+          // Find the playlist by simpleId
+          {
+            $push: {
+              comments: {
+                author: author,
+                content: content
+              } // Push the new comment to the comments array
+            }
+          });
+        case 8:
+          result = _context18.sent;
+          if (!(result.matchedCount === 0)) {
+            _context18.next = 11;
+            break;
+          }
+          return _context18.abrupt("return", res.status(404).json({
+            message: 'Playlist not found'
+          }));
+        case 11:
+          res.status(200).json({
+            message: 'Comment added successfully'
+          });
+          _context18.next = 18;
+          break;
+        case 14:
+          _context18.prev = 14;
+          _context18.t0 = _context18["catch"](4);
+          console.error(_context18.t0);
+          res.status(500).json({
+            message: 'An error occurred while adding the comment'
+          });
+        case 18:
+        case "end":
+          return _context18.stop();
+      }
+    }, _callee18, null, [[4, 14]]);
+  }));
+  return function (_x35, _x36) {
+    return _ref18.apply(this, arguments);
+  };
+}());
 var _default = exports["default"] = router;
