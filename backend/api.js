@@ -450,11 +450,10 @@ router.get('/playlists/user/:songId', async (req, res) => {
 
 //delete a song
 router.delete('/songs/:songId', async (req, res) => {
+
     try 
     {
         const songId = parseInt(req.params.songId, 10);
-
-        // console.log('Attempting to delete song with simpleId:', songId);
 
         const result = await req.app.locals.songsCollection.findOneAndDelete({ simpleId: songId });
 
@@ -463,7 +462,23 @@ router.delete('/songs/:songId', async (req, res) => {
             return res.status(404).json({ message: "Song not found" });
         }
 
-        res.status(200).json({ message: "Song deleted successfully" });
+        // Remove the song from all playlists
+        const updateResult = await req.app.locals.playlistsCollection.updateMany(
+            { songs: songId }, // Find playlists that include the song
+            { $pull: { songs: songId } } // Remove the song from the songs array
+        );
+
+        if (updateResult.modifiedCount > 0) 
+        {
+            console.log(`Song with simpleId: ${songId} removed from ${updateResult.modifiedCount} playlist(s).`);
+        }
+
+        // res.status(200).json({ message: "Song deleted successfully" });
+
+        res.status(200).json({ 
+            message: "Song deleted successfully", 
+            playlistsUpdated: updateResult.modifiedCount
+        });
     } 
     catch (error) 
     {
@@ -620,7 +635,7 @@ router.put('/addSongToPlaylist/:playlistId/:ownerId', async (req, res) => {
     catch (error) 
     {
         console.error('Error adding song to playlist:', error);
-        
+
         res.status(500).json({ message: 'Error adding song to playlist', error: error.message });
     }
 });

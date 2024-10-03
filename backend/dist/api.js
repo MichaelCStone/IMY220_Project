@@ -722,12 +722,12 @@ router.get('/playlists/user/:songId', /*#__PURE__*/function () {
 //delete a song
 router["delete"]('/songs/:songId', /*#__PURE__*/function () {
   var _ref13 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee13(req, res) {
-    var songId, result;
+    var songId, result, updateResult;
     return _regeneratorRuntime().wrap(function _callee13$(_context13) {
       while (1) switch (_context13.prev = _context13.next) {
         case 0:
           _context13.prev = 0;
-          songId = parseInt(req.params.songId, 10); // console.log('Attempting to delete song with simpleId:', songId);
+          songId = parseInt(req.params.songId, 10);
           _context13.next = 4;
           return req.app.locals.songsCollection.findOneAndDelete({
             simpleId: songId
@@ -742,24 +742,44 @@ router["delete"]('/songs/:songId', /*#__PURE__*/function () {
             message: "Song not found"
           }));
         case 7:
+          _context13.next = 9;
+          return req.app.locals.playlistsCollection.updateMany({
+            songs: songId
+          },
+          // Find playlists that include the song
+          {
+            $pull: {
+              songs: songId
+            }
+          } // Remove the song from the songs array
+          );
+        case 9:
+          updateResult = _context13.sent;
+          if (updateResult.modifiedCount > 0) {
+            console.log("Song with simpleId: ".concat(songId, " removed from ").concat(updateResult.modifiedCount, " playlist(s)."));
+          }
+
+          // res.status(200).json({ message: "Song deleted successfully" });
+
           res.status(200).json({
-            message: "Song deleted successfully"
+            message: "Song deleted successfully",
+            playlistsUpdated: updateResult.modifiedCount
           });
-          _context13.next = 14;
+          _context13.next = 18;
           break;
-        case 10:
-          _context13.prev = 10;
+        case 14:
+          _context13.prev = 14;
           _context13.t0 = _context13["catch"](0);
           console.error('Error deleting song:', _context13.t0);
           res.status(500).json({
             message: 'Error deleting song',
             error: _context13.t0.message
           });
-        case 14:
+        case 18:
         case "end":
           return _context13.stop();
       }
-    }, _callee13, null, [[0, 10]]);
+    }, _callee13, null, [[0, 14]]);
   }));
   return function (_x25, _x26) {
     return _ref13.apply(this, arguments);
