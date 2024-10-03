@@ -105,6 +105,7 @@ class App extends Component {
   };
 
   render() {
+
     const { songs, playlists, profile, followers, following, userProfile } = this.state;
 
     return (
