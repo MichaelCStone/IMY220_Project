@@ -1,6 +1,6 @@
 // u21497682 - Michael Stone
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Navigation from "../components/General/Navigation"
 import Profile from '../components/Profile/Profile';
 import EditProfile from '../components/Profile/EditProfile';
@@ -14,16 +14,11 @@ class ProfilePage extends Component
   {
     super(props);
 
-    // this.state = {
-    //   isEditing: false,
-    //   isCreatingPlaylist: false,
-    // };
-
     this.state = {
-      profile: props.profile, // use profile data from props
-      playlists: props.playlists, // use playlists data from props
-      followers: props.followers, // use followers data from props
-      following: props.following, // use following data from props
+      profile: {},
+      playlists: [],
+      followers: [],
+      following: [],
       isEditing: false,
       isCreatingPlaylist: false
     };
@@ -32,6 +27,65 @@ class ProfilePage extends Component
     this.toggleCreatePlaylist = this.toggleCreatePlaylist.bind(this);
     this.handleProfileUpdate = this.handleProfileUpdate.bind(this);
   }
+
+  componentDidMount() {
+    // console.log(this.props);
+
+    const { profile, username } = this.props;
+
+    if (username) 
+    {
+      this.fetchProfile(username); // Fetch the profile based on username
+    }
+    else 
+    {
+      console.warn('Username is undefined. Cannot fetch profile and playlists.');
+    }
+  }
+
+  fetchProfile = async (username) => {
+    try 
+    {
+      const response = await fetch(`http://localhost:3000/api/profiles/${username}`);
+      const profile = await response.json();
+  
+      if (profile) 
+      {
+        this.setState({ profile }, () => {
+          this.fetchPlaylists(profile.simpleId); // Fetch playlists using the ownerId from profile
+        });
+      } 
+      else 
+      {
+        console.warn('Fetched profile is undefined.');
+      }
+    } 
+    catch (error) 
+    {
+      console.error('Error fetching profile:', error);
+    }
+  };
+
+  fetchPlaylists = async (ownerId) => {
+    try 
+    {
+      if (!ownerId) 
+      {
+        console.warn('ownerId is undefined.');
+        return; // Prevent fetching if ownerId is not defined
+      }
+      
+      const playlistsResponse = await fetch(`http://localhost:3000/api/playlists/user/${ownerId}`);
+
+      const playlists = await playlistsResponse.json();
+
+      this.setState({ playlists });
+    } 
+    catch (error) 
+    {
+      console.error('Error fetching playlists:', error);
+    }
+  };
 
   toggleEdit() 
   {
@@ -61,8 +115,6 @@ class ProfilePage extends Component
 
   render()
   {
-    // const { profile, playlists, followers, following } = this.props;
-    // const { isEditing, isCreatingPlaylist } = this.state;
     const { profile, playlists, followers, following, isEditing, isCreatingPlaylist } = this.state;
 
     return (
@@ -114,4 +166,12 @@ class ProfilePage extends Component
   }
 };
 
-export default ProfilePage;
+// Use a wrapper to get params from the route
+const ProfilePageWrapper = (props) => {
+  const params = useParams();
+  return <ProfilePage {...props} username={params.username} />;
+};
+
+export default ProfilePageWrapper;
+
+// export default ProfilePage;

@@ -157,8 +157,8 @@ class App extends Component {
           {/* <Route path="/playlist/:id" element={<PlaylistPage playlist={playlists[0]} songs={songs} />} /> */}
           {/* <Route path="/playlist/:id" element={<PlaylistPage playlists={playlists} songs={songs} />} /> */}
 
-          <Route path="/profile" element={<ProfilePage profile={profile} playlists={playlists} followers={followers} following={following} />} />
-          {/* <Route path="/profile/:id" element={<ProfilePage profile={profile} playlists={playlists} followers={followers} following={following} />} /> */}
+          {/* <Route path="/profile" element={<ProfilePage profile={profile} playlists={playlists} followers={followers} following={following} />} /> */}
+          <Route path="/profile/:username" element={<ProfilePage profile={profile} playlists={playlists} followers={followers} following={following} />} />
         </Routes>
       </Router>
     );

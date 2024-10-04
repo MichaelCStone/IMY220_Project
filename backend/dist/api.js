@@ -674,7 +674,7 @@ router.post('/addPlaylist', /*#__PURE__*/function () {
 }());
 
 //Get all playlists of a specific profile
-router.get('/playlists/user/:songId', /*#__PURE__*/function () {
+router.get('/playlists/user/:ownerId', /*#__PURE__*/function () {
   var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee12(req, res) {
     var ownerId, profilePlaylists;
     return _regeneratorRuntime().wrap(function _callee12$(_context12) {

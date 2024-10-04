@@ -420,7 +420,7 @@ router.post('/addPlaylist', async (req, res) => {
 });
 
 //Get all playlists of a specific profile
-router.get('/playlists/user/:songId', async (req, res) => {
+router.get('/playlists/user/:ownerId', async (req, res) => {
     
     try 
     {
