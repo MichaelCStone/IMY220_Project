@@ -29,7 +29,7 @@ class Header extends Component
 
             <Link to="/home" style={{ paddingRight: '10px' }}>Home</Link>
 
-            <Link to="/playlist" style={{ paddingRight: '10px' }}>Playlists</Link>
+            {/* <Link to="/playlist" style={{ paddingRight: '10px' }}>Playlists</Link> */}
 
             {/* <Link to="/profile/userId">Profile</Link> */}
             <Link to={`/profile/${username}`}>Profile</Link>

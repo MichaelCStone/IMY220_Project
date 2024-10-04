@@ -7,6 +7,7 @@ import EditProfile from '../components/Profile/EditProfile';
 import PlaylistPreview from '../components/General/PlaylistPreview';
 import ProfilePreview from '../components/General/ProfilePreview';
 import CreatePlaylist from '../components/Profile/CreatePlaylist';
+import AddSongToPlaylist from '../components/General/AddSongToPlaylist';
 
 class ProfilePage extends Component
 {
@@ -142,7 +143,7 @@ class ProfilePage extends Component
           {isEditing && <EditProfile profile={profile} onSave={this.handleProfileUpdate} />}
         </div>
 
-        <div className="playlists">
+        {/* <div className="playlists">
           <h3>User's Playlists</h3>
           {playlists.map((playlist, index) => (
             <PlaylistPreview key={index} playlist={playlist} />
@@ -153,6 +154,28 @@ class ProfilePage extends Component
           </button>
 
           {isCreatingPlaylist && <CreatePlaylist addPlaylist={this.handleAddPlaylist} profile={profile}/>}
+        </div> */}
+
+        <div className="playlists">
+          <h3>User's Playlists</h3>
+          {playlists.map((playlist, index) => (
+            <div key={index}>
+              <PlaylistPreview playlist={playlist} />
+              {/* Pass the current playlist ID and ownerId to the AddSongToPlaylist component */}
+              <AddSongToPlaylist
+                songs={this.props.songs} // Pass the available songs as props
+                onAddSongToPlaylist={this.handleAddPlaylist}
+                playlistId={playlist.simpleId} // Use the playlist's ID
+                ownerId={profile.simpleId} // Use the profile's ownerId
+              />
+            </div>
+          ))}
+
+          <button onClick={this.toggleCreatePlaylist}>
+            {isCreatingPlaylist ? 'Cancel' : 'Create New Playlist'}
+          </button>
+
+          {isCreatingPlaylist && <CreatePlaylist addPlaylist={this.handleAddPlaylist} profile={profile} />}
         </div>
 
         <div className="followers">
