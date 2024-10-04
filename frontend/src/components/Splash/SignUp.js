@@ -99,7 +99,7 @@ class SignUpForm extends Component
         {
             try 
             {
-                const response = await fetch(`http://localhost:${thePort}/api/login`, {
+                const response = await fetch(`http://localhost:${thePort}/api/signup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

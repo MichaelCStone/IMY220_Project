@@ -1,6 +1,8 @@
 // u21497682 - Michael Stone
 import React, { Component } from 'react';
 
+const thePort = 3000;
+
 class AddSongToWebsite extends Component 
 {
     constructor (props)
@@ -12,7 +14,10 @@ class AddSongToWebsite extends Component
             artist: '',
             album: '',
             genre: '',
-            year: ''
+            year: '',
+            spotifyLink: '',
+            errorMessage: '',
+            successMessage: ''
         };
     }
 
@@ -20,7 +25,7 @@ class AddSongToWebsite extends Component
         this.setState({ [event.target.name]: event.target.value });
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
 
         const newSong = {
@@ -28,27 +33,83 @@ class AddSongToWebsite extends Component
             artist: this.state.artist,
             album: this.state.album,
             genre: this.state.genre,
-            year: this.state.year
+            year: this.state.year,
+            spotifyLink: this.state.spotifyLink
         };
 
-        if (this.props.onSave) 
+        try 
         {
-            this.props.onSave(newSong);
+            // Make the POST request to your API
+            const response = await fetch(`http://localhost:${thePort}/api/addSong`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newSong)
+            });
+
+            if (response.ok) 
+            {
+                const data = await response.json();
+                
+                // Optionally call the parent component's onSave method to update the UI
+                if (this.props.onSave) 
+                {
+                    this.props.onSave(data.newSong);
+                }
+
+                // Reset the form and show a success message
+                this.setState({
+                    title: '',
+                    artist: '',
+                    album: '',
+                    genre: '',
+                    year: '',
+                    spotifyLink: '',
+                    successMessage: 'Song added successfully!',
+                    errorMessage: ''
+                });
+            } 
+            else 
+            {
+                const errorData = await response.json();
+                this.setState({
+                    errorMessage: errorData.message,
+                    successMessage: ''
+                });
+            }
+        } 
+        catch (error) 
+        {
+            this.setState({
+                errorMessage: 'Error adding song. Please try again later.',
+                successMessage: ''
+            });
         }
 
-        this.setState({
-            title: '',
-            artist: '',
-            album: '',
-            genre: '',
-            year: ''
-        });
+        // if (this.props.onSave) 
+        // {
+        //     this.props.onSave(newSong);
+        // }
+
+        // this.setState({
+        //     title: '',
+        //     artist: '',
+        //     album: '',
+        //     genre: '',
+        //     year: '',
+        //     spotifyLink: ''
+        // });
     }
 
     render() {
         return (
             <div>
                 <h2>Add a New Song</h2>
+
+                {this.state.successMessage && <p style={{ color: 'green' }}>{this.state.successMessage}</p>}
+                {this.state.errorMessage && <p style={{ color: 'red' }}>{this.state.errorMessage}</p>}
+
                 <form onSubmit={this.handleSubmit}>
                     <div>
                         <label>Title:</label>
@@ -73,6 +134,11 @@ class AddSongToWebsite extends Component
                     <div>
                         <label>Year:</label>
                         <input type="number" name="year" value={this.state.year} onChange={this.handleChange} required />
+                    </div>
+
+                    <div>
+                        <label>spotifyLink:</label>
+                        <input type="text" name="spotifyLink" value={this.state.spotifyLink} onChange={this.handleChange} required />
                     </div>
 
                     <button type="submit">Add Song</button>
