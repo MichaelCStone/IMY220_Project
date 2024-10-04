@@ -29,14 +29,54 @@ class CreatePlaylist extends Component
     });
   }
 
-  handleSubmit(event) 
-  {
+  // handleSubmit(event) 
+  // {
+  //   event.preventDefault();
+
+  //   const newPlaylist = { ...this.state };
+    
+  //   // Call the parent method passed as prop to add a new playlist
+  //   this.props.addPlaylist(newPlaylist);  
+
+  //   // Reset form after submission
+  //   this.setState({
+  //     picture: '',
+  //     name: '',
+  //     genre: '',
+  //     category: '',
+  //     hashtags: '',
+  //     description: ''
+  //   });
+  // }
+
+  handleSubmit(event) {
     event.preventDefault();
 
-    const newPlaylist = { ...this.state };
-    
-    // Call the parent method passed as prop to add a new playlist
-    this.props.addPlaylist(newPlaylist);  
+    const newPlaylist = {
+      ...this.state,
+      ownerId: this.props.profile.simpleId // Ensure to send the ownerId
+    };
+
+    // Send the new playlist to the backend
+    fetch('http://localhost:3000/api/addPlaylist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newPlaylist),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.playlist) {
+          // Call the parent method passed as prop to add a new playlist
+          this.props.addPlaylist(data.playlist);
+        } else {
+          console.error('Error creating playlist:', data.message);
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
 
     // Reset form after submission
     this.setState({

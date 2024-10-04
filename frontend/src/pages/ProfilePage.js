@@ -106,6 +106,13 @@ class ProfilePage extends Component
     this.setState({ profile: updatedProfile, isEditing: false });
   }
 
+  // handleAddPlaylist = (newPlaylist) => {
+  //   this.setState((prevState) => ({
+  //     playlists: [...prevState.playlists, newPlaylist],
+  //     isCreatingPlaylist: false,  // Hide the form after submission
+  //   }));
+  // }
+
   handleAddPlaylist = (newPlaylist) => {
     this.setState((prevState) => ({
       playlists: [...prevState.playlists, newPlaylist],
@@ -145,7 +152,7 @@ class ProfilePage extends Component
             {isCreatingPlaylist ? 'Cancel' : 'Create New Playlist'}
           </button>
 
-          {isCreatingPlaylist && <CreatePlaylist addPlaylist={this.handleAddPlaylist} />}
+          {isCreatingPlaylist && <CreatePlaylist addPlaylist={this.handleAddPlaylist} profile={profile}/>}
         </div>
 
         <div className="followers">
