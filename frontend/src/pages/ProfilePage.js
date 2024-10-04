@@ -166,7 +166,6 @@ class ProfilePage extends Component
   }
 };
 
-// Use a wrapper to get params from the route
 const ProfilePageWrapper = (props) => {
   const params = useParams();
   return <ProfilePage {...props} username={params.username} />;

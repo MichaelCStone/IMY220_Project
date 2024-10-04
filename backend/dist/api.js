@@ -692,9 +692,7 @@ router.get('/playlists/user/:ownerId', /*#__PURE__*/function () {
             _context12.next = 7;
             break;
           }
-          return _context12.abrupt("return", res.status(404).json({
-            message: 'No playlists found for this user'
-          }));
+          return _context12.abrupt("return", res.json([]));
         case 7:
           // Return the playlists in the response
           res.json(profilePlaylists);
@@ -786,7 +784,7 @@ router["delete"]('/songs/:songId', /*#__PURE__*/function () {
   };
 }());
 
-//Delte my profile (and all of my playlists as well)
+//Delete my profile (and all of my playlists as well)
 router["delete"]('/profiles/:simpleId', /*#__PURE__*/function () {
   var _ref14 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee14(req, res) {
     var simpleId, result;

@@ -194,7 +194,7 @@ router.put('/profiles/:username', async (req, res) => {
             { username: username },
             { $set: updatedProfileData },
             { returnDocument: "after" }
-        ); //.select('-password'); // Exclude password
+        );
 
         if (!updatedUser) 
         {
@@ -429,9 +429,11 @@ router.get('/playlists/user/:ownerId', async (req, res) => {
 
         if (profilePlaylists.length === 0) 
         {
-            return res.status(404).json({
-                message: 'No playlists found for this user'
-            });
+            // return res.status(404).json({
+            //     message: 'No playlists found for this user'
+            // });
+
+            return res.json([]);
         }
 
         // Return the playlists in the response
@@ -491,7 +493,7 @@ router.delete('/songs/:songId', async (req, res) => {
     }
 });
 
-//Delte my profile (and all of my playlists as well)
+//Delete my profile (and all of my playlists as well)
 router.delete('/profiles/:simpleId', async (req, res) => {
 
     const simpleId = parseInt(req.params.simpleId, 10);
