@@ -8,6 +8,8 @@ import ProfilePage from './pages/ProfilePage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 
+const thePort = 3000;
+
 class App extends Component {
   // constructor(props) {
   //   super(props);
@@ -92,6 +94,37 @@ class App extends Component {
       following: []
     };
   }
+
+  componentDidMount() {
+    this.fetchSongs();
+    this.fetchPlaylists();
+  }
+
+  fetchSongs = async () => {
+    try 
+    {
+      const response = await fetch(`http://localhost:${thePort}/api/songs`);
+      const songs = await response.json();
+      this.setState({ songs });
+    } 
+    catch (error) 
+    {
+      console.error('Error fetching songs:', error);
+    }
+  };
+
+  fetchPlaylists = async () => {
+    try 
+    {
+      const response = await fetch(`http://localhost:${thePort}/api/playlists`);
+      const playlists = await response.json();
+      this.setState({ playlists });
+    } 
+    catch (error) 
+    {
+      console.error('Error fetching playlists:', error);
+    }
+  };
 
   handleLogin = (profile) => {
     this.setState({ userProfile: profile });
