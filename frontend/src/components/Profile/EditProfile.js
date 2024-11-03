@@ -92,43 +92,96 @@ class EditProfile extends Component
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <div>
-                    <label>Name:</label>
-                    <input type="text" name="name" value={this.state.name} onChange={this.handleChange} required />
+            <form onSubmit={this.handleSubmit} className="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto text-gray-800">
+                <h2 className="text-2xl font-semibold mb-4 text-center">Edit Profile</h2>
+
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Name:</label>
+                    <input
+                        type="text"
+                        name="name"
+                        value={this.state.name}
+                        onChange={this.handleChange}
+                        required
+                        className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+                    />
                 </div>
 
-                <div>
-                    <label>Bio:</label>
-                    <textarea name="bio" value={this.state.bio} onChange={this.handleChange} required />
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Bio:</label>
+                    <textarea
+                        name="bio"
+                        value={this.state.bio}
+                        onChange={this.handleChange}
+                        required
+                        className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+                    />
                 </div>
 
-                <div>
-                    <label>Country:</label>
-                    <input type="text" name="country" value={this.state.country} onChange={this.handleChange} required />
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Country:</label>
+                    <input
+                        type="text"
+                        name="country"
+                        value={this.state.country}
+                        onChange={this.handleChange}
+                        required
+                        className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+                    />
                 </div>
 
-                <div>
-                    <label>Picture URL:</label>
-                    <input type="text" name="picture" value={this.state.picture} onChange={this.handleChange} />
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Picture URL:</label>
+                    <input
+                        type="text"
+                        name="picture"
+                        value={this.state.picture}
+                        onChange={this.handleChange}
+                        className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+                    />
                 </div>
 
-                <div>
-                    <label>Username:</label>
-                    <input type="text" name="username" value={this.state.username} onChange={this.handleChange} required />
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Username:</label>
+                    <input
+                        type="text"
+                        name="username"
+                        value={this.state.username}
+                        onChange={this.handleChange}
+                        required
+                        className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+                    />
                 </div>
 
-                <div>
-                    <label>Email:</label>
-                    <input type="email" name="email" value={this.state.email} onChange={this.handleChange} required />
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Email:</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={this.state.email}
+                        onChange={this.handleChange}
+                        required
+                        className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+                    />
                 </div>
 
-                <div>
-                    <label>Password:</label>
-                    <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700">Password:</label>
+                    <input
+                        type="password"
+                        name="password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                        className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+                    />
                 </div>
 
-                <button type="submit">Save</button>
+                <button
+                    type="submit"
+                    className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                    Save
+                </button>
             </form>
         );
     }

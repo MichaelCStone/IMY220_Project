@@ -137,29 +137,48 @@ class AddSongToPlaylist extends Component
         const { songs, loading, selectedSongs } = this.state;
 
         if (loading) {
-            return <div>Loading songs...</div>;
+            return <div className="text-gray-500">Loading songs...</div>;
         }
 
         return (
-            <div>
-                <h2>Select Songs to Add to Playlist</h2>
-                {songs.map(song => (
-                    <div key={song.id} style={{ marginBottom: '10px' }}>
-                        <span>{song.title}</span>
-                        <button onClick={() => this.handleSelectSong(song)}>
-                            Select
-                        </button>
-                    </div>
-                ))}
-                <button onClick={this.handleAddToPlaylist} disabled={selectedSongs.length === 0}>
+            <div className="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">Add Songs to Playlist</h2>
+
+                <div className="space-y-4">
+                    {songs.map(song => (
+                        <div
+                            key={song.id}
+                            className="flex justify-between items-center p-3 border rounded-lg bg-gray-50 hover:bg-gray-100 transition duration-200"
+                        >
+                            <span className="text-gray-700">{song.title}</span>
+                            <button
+                                onClick={() => this.handleSelectSong(song)}
+                                className="bg-indigo-500 text-white px-4 py-1 rounded-lg hover:bg-indigo-600 transition duration-300"
+                            >
+                                Select
+                            </button>
+                        </div>
+                    ))}
+                </div>
+
+                <button
+                    onClick={this.handleAddToPlaylist}
+                    disabled={selectedSongs.length === 0}
+                    className={`w-full mt-6 py-2 font-semibold rounded-lg transition duration-300 ${
+                        selectedSongs.length > 0
+                            ? 'bg-green-500 text-white hover:bg-green-600'
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    }`}
+                >
                     Add Selected Songs to Playlist
                 </button>
+
                 {selectedSongs.length > 0 && (
-                    <div>
-                        <h3>Selected Songs:</h3>
-                        <ul>
+                    <div className="mt-6">
+                        <h3 className="text-xl font-semibold text-gray-800 mb-2">Selected Songs:</h3>
+                        <ul className="list-disc list-inside space-y-2">
                             {selectedSongs.map(song => (
-                                <li key={song.id}>{song.title}</li>
+                                <li key={song.id} className="text-gray-700">{song.title}</li>
                             ))}
                         </ul>
                     </div>

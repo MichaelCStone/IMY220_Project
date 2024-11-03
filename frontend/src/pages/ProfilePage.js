@@ -126,70 +126,71 @@ class ProfilePage extends Component
     const { profile, playlists, followers, following, isEditing, isCreatingPlaylist } = this.state;
 
     return (
-      <div>
-        <h1>Profile Page!</h1>
+      <div className="min-h-screen bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-white">
+        {/* Navigation */}
         <Navigation />
 
-        <div>
-          <Profile profile={profile} toggleEdit={this.toggleEdit} isEditing={isEditing} />
-        </div>
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-4xl font-bold mb-6 text-center">Profile Page</h1>
 
-        <div>
-          <button onClick={this.toggleEdit}>
-            {isEditing ? 'Cancel' : 'Edit Profile'}
-          </button>
+          {/* Profile Section */}
+          <div className="bg-white text-gray-900 p-6 rounded-lg shadow-lg mb-8">
+            <Profile profile={profile} toggleEdit={this.toggleEdit} isEditing={isEditing} />
+            <button
+              onClick={this.toggleEdit}
+              className="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition duration-300"
+            >
+              {isEditing ? 'Cancel' : 'Edit Profile'}
+            </button>
+            {isEditing && (
+              <div className="mt-4">
+                <EditProfile profile={profile} onSave={this.handleProfileUpdate} />
+              </div>
+            )}
+          </div>
 
-          {/* {isEditing && <EditProfile profile={profile} toggleEdit={this.toggleEdit} />} */}
-          {isEditing && <EditProfile profile={profile} onSave={this.handleProfileUpdate} />}
-        </div>
+          {/* Playlists Section */}
+          <div className="bg-white text-gray-900 p-6 rounded-lg shadow-lg mb-8">
+            <h2 className="text-2xl font-semibold mb-4">User's Playlists</h2>
+            {playlists.map((playlist, index) => (
+              <div key={index} className="mb-4">
+                <PlaylistPreview playlist={playlist} />
+                <AddSongToPlaylist
+                  songs={this.props.songs}
+                  onAddSongToPlaylist={this.handleAddPlaylist}
+                  playlistId={playlist.simpleId}
+                  ownerId={profile.simpleId}
+                />
+              </div>
+            ))}
+            <button
+              onClick={this.toggleCreatePlaylist}
+              className="mt-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-300"
+            >
+              {isCreatingPlaylist ? 'Cancel' : 'Create New Playlist'}
+            </button>
+            {isCreatingPlaylist && (
+              <div className="mt-4">
+                <CreatePlaylist addPlaylist={this.handleAddPlaylist} profile={profile} />
+              </div>
+            )}
+          </div>
 
-        {/* <div className="playlists">
-          <h3>User's Playlists</h3>
-          {playlists.map((playlist, index) => (
-            <PlaylistPreview key={index} playlist={playlist} />
-          ))}
+          {/* Followers Section */}
+          <div className="bg-white text-gray-900 p-6 rounded-lg shadow-lg mb-8">
+            <h2 className="text-2xl font-semibold mb-4">Followers</h2>
+            {followers.map((follower, index) => (
+              <ProfilePreview key={index} profile={follower} />
+            ))}
+          </div>
 
-          <button onClick={this.toggleCreatePlaylist}>
-            {isCreatingPlaylist ? 'Cancel' : 'Create New Playlist'}
-          </button>
-
-          {isCreatingPlaylist && <CreatePlaylist addPlaylist={this.handleAddPlaylist} profile={profile}/>}
-        </div> */}
-
-        <div className="playlists">
-          <h3>User's Playlists</h3>
-          {playlists.map((playlist, index) => (
-            <div key={index}>
-              <PlaylistPreview playlist={playlist} />
-              {/* Pass the current playlist ID and ownerId to the AddSongToPlaylist component */}
-              <AddSongToPlaylist
-                songs={this.props.songs} // Pass the available songs as props
-                onAddSongToPlaylist={this.handleAddPlaylist}
-                playlistId={playlist.simpleId} // Use the playlist's ID
-                ownerId={profile.simpleId} // Use the profile's ownerId
-              />
-            </div>
-          ))}
-
-          <button onClick={this.toggleCreatePlaylist}>
-            {isCreatingPlaylist ? 'Cancel' : 'Create New Playlist'}
-          </button>
-
-          {isCreatingPlaylist && <CreatePlaylist addPlaylist={this.handleAddPlaylist} profile={profile} />}
-        </div>
-
-        <div className="followers">
-          <h3>Followers</h3>
-          {followers.map((follower, index) => (
-            <ProfilePreview key={index} profile={follower} />
-          ))}
-        </div>
-
-        <div className="following">
-          <h3>Following</h3>
-          {following.map((followedUser, index) => (
-            <ProfilePreview key={index} profile={followedUser} />
-          ))}
+          {/* Following Section */}
+          <div className="bg-white text-gray-900 p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-semibold mb-4">Following</h2>
+            {following.map((followedUser, index) => (
+              <ProfilePreview key={index} profile={followedUser} />
+            ))}
+          </div>
         </div>
       </div>
     );

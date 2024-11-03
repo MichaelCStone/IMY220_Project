@@ -92,46 +92,97 @@ class CreatePlaylist extends Component
   render() 
   {
     return (
-      <div className="create-playlist">
-        <h2>Create a New Playlist</h2>
+      <div className="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Create a New Playlist</h2>
 
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} className="space-y-4">
           <div>
-            <label>Playlist Picture</label>
-            <input type="file" name="picture" onChange={this.handleInputChange} accept="image/*" />
+            <label className="block text-sm font-medium text-gray-700">Playlist Picture</label>
+            <input
+              type="file"
+              name="picture"
+              onChange={this.handleInputChange}
+              accept="image/*"
+              className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
           </div>
 
           <div>
-            <label>Playlist Name</label>
-            <input type="text" name="name" value={this.state.name} onChange={this.handleInputChange} required />
+            <label className="block text-sm font-medium text-gray-700">Playlist Name</label>
+            <input
+              type="text"
+              name="name"
+              value={this.state.name}
+              onChange={this.handleInputChange}
+              required
+              className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
           </div>
 
           <div>
-            <label>Author</label>
-            <input type="text" name="author" value={this.state.author} readOnly />
+            <label className="block text-sm font-medium text-gray-700">Author</label>
+            <input
+              type="text"
+              name="author"
+              value={this.state.author}
+              readOnly
+              className="mt-1 p-2 w-full border rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed"
+            />
           </div>
 
           <div>
-            <label>Genre</label>
-            <input type="text" name="genre" value={this.state.genre} onChange={this.handleInputChange} required />
+            <label className="block text-sm font-medium text-gray-700">Genre</label>
+            <input
+              type="text"
+              name="genre"
+              value={this.state.genre}
+              onChange={this.handleInputChange}
+              required
+              className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
           </div>
 
           <div>
-            <label>Category</label>
-            <input type="text" name="category" value={this.state.category} onChange={this.handleInputChange} required />
+            <label className="block text-sm font-medium text-gray-700">Category</label>
+            <input
+              type="text"
+              name="category"
+              value={this.state.category}
+              onChange={this.handleInputChange}
+              required
+              className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
           </div>
 
           <div>
-            <label>Hashtags</label>
-            <input type="text" name="hashtags" value={this.state.hashtags} onChange={this.handleInputChange} placeholder="#tag1 #tag2" />
+            <label className="block text-sm font-medium text-gray-700">Hashtags</label>
+            <input
+              type="text"
+              name="hashtags"
+              value={this.state.hashtags}
+              onChange={this.handleInputChange}
+              placeholder="#tag1 #tag2"
+              className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
           </div>
 
           <div>
-            <label>Description</label>
-            <textarea name="description" value={this.state.description} onChange={this.handleInputChange} required />
+            <label className="block text-sm font-medium text-gray-700">Description</label>
+            <textarea
+              name="description"
+              value={this.state.description}
+              onChange={this.handleInputChange}
+              required
+              className="mt-1 p-2 w-full border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
           </div>
-          
-          <button type="submit">Create Playlist</button>
+
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            Create Playlist
+          </button>
         </form>
       </div>
     );

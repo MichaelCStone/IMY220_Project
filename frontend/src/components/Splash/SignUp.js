@@ -83,8 +83,19 @@ class SignUpForm extends Component
   };
 
   handleFileChange = (event) => {
+    // const file = event.target.files[0];
+    // this.setState({ profilePicture: file });
+
     const file = event.target.files[0];
-    this.setState({ profilePicture: file });
+    const reader = new FileReader();
+    
+    reader.onloadend = () => {
+      this.setState({ profilePicture: reader.result });
+    };
+    
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   };
 
   handleSubmit = async (event) => {
