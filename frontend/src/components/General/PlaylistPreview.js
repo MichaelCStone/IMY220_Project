@@ -3,14 +3,21 @@ import React, { Component } from 'react';
 
 class PlaylistPreview extends Component 
 {
-  render() 
-  {
+  render() {
+    const { name, genre } = this.props.playlist;
+
     return (
-      <div>
-        {/* <img src={picture} alt={`${name} cover`} style={{ width: '100px', height: '100px' }} /> */}
-        {/* <img></img> */}
-        <h3>{this.props.playlist.name}</h3>
-        <p>{this.props.playlist.genre}</p>
+      <div className="flex items-center bg-gray-50 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow space-x-4">
+        {/* Placeholder for Album Cover Image */}
+        <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0">
+          {/* <img src={picture} alt={`${name} cover`} className="w-full h-full object-cover rounded-lg" /> */}
+        </div>
+
+        {/* Playlist Information */}
+        <div>
+          <h3 className="text-xl font-semibold text-gray-800">{name}</h3>
+          <p className="text-gray-600">{genre}</p>
+        </div>
       </div>
     );
   }

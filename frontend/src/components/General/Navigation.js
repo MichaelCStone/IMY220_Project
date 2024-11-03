@@ -25,15 +25,28 @@ class Header extends Component
   render() 
   {
     return (
-        <nav className="navbar" style={{ padding: '10px' }}>
+      <nav className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 p-4 flex justify-between items-center shadow-lg text-white">
+        <div className="text-2xl font-bold">
+          <Link to="/home" className="hover:text-yellow-300 transition duration-300">
+            Groovella
+          </Link>
+        </div>
 
-            <Link to="/home" style={{ paddingRight: '10px' }}>Home</Link>
-
-            {/* <Link to="/playlist" style={{ paddingRight: '10px' }}>Playlists</Link> */}
-
-            {/* <Link to="/profile/userId">Profile</Link> */}
-            <Link to={`/profile/${username}`}>Profile</Link>
-        </nav>
+        <div className="flex space-x-6">
+          <Link
+            to="/home"
+            className="px-4 py-2 rounded-lg bg-indigo-700 hover:bg-indigo-600 transition duration-300"
+          >
+            Home
+          </Link>
+          <Link
+            to={`/profile/${username}`}
+            className="px-4 py-2 rounded-lg bg-indigo-700 hover:bg-indigo-600 transition duration-300"
+          >
+            Profile
+          </Link>
+        </div>
+      </nav>
     );
   }
 }

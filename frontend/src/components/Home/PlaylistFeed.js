@@ -29,12 +29,16 @@ class PlaylistFeed extends Component
     );
 
     return (
-      <div>
+      <div className="bg-white shadow-lg rounded-lg p-6 mt-8">
+        {/* Search Input */}
         <SearchInput handleSearch={this.handleSearch} />
 
-        {filteredPlaylists.map((playlist, index) => (
-          <PlaylistPreview key={index} playlist={playlist} />
-        ))}
+        {/* Playlist Previews */}
+        <div className="mt-6 space-y-4">
+          {filteredPlaylists.map((playlist, index) => (
+            <PlaylistPreview key={index} playlist={playlist} />
+          ))}
+        </div>
       </div>
     );
   }

@@ -43,21 +43,35 @@ class SongFeed extends Component
         );
 
         return (
-            <div className="feed">
-
-                <button onClick={this.toggleAddSongForm}>
-                    {showAddSongForm ? 'Hide Add Song Form' : 'Add a New Song'}
-                </button>
-
-                {showAddSongForm && <AddSongToWebsite onSave={this.addSong} />}
-
+            <div className="bg-white shadow-lg rounded-lg p-6 mt-8">
+              {/* Add Song Button */}
+              <button
+                onClick={this.toggleAddSongForm}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mb-4"
+              >
+                {showAddSongForm ? 'Hide Add Song Form' : 'Add a New Song'}
+              </button>
+      
+              {/* Add Song Form */}
+              {showAddSongForm && (
+                <div className="mb-6">
+                  <AddSongToWebsite onSave={this.addSong} />
+                </div>
+              )}
+      
+              {/* Search Input */}
+              <div className="mb-6">
                 <SearchInput handleSearch={this.handleSearch} />
-
+              </div>
+      
+              {/* Song List */}
+              <div className="space-y-4">
                 {filteredSongs.map((song, index) => (
-                    <Song key={index} song={song} />
+                  <Song key={index} song={song} />
                 ))}
+              </div>
             </div>
-        );
+          );
     }
 }
 

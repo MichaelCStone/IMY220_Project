@@ -104,47 +104,34 @@ class AddSongToWebsite extends Component
 
     render() {
         return (
-            <div>
-                <h2>Add a New Song</h2>
-
-                {this.state.successMessage && <p style={{ color: 'green' }}>{this.state.successMessage}</p>}
-                {this.state.errorMessage && <p style={{ color: 'red' }}>{this.state.errorMessage}</p>}
-
-                <form onSubmit={this.handleSubmit}>
-                    <div>
-                        <label>Title:</label>
-                        <input type="text" name="title" value={this.state.title} onChange={this.handleChange} required />
-                    </div>
-
-                    <div>
-                        <label>Artist:</label>
-                        <input type="text" name="artist" value={this.state.artist} onChange={this.handleChange} required />
-                    </div>
-
-                    <div>
-                        <label>Album:</label>
-                        <input type="text" name="album" value={this.state.album} onChange={this.handleChange} required />
-                    </div>
-
-                    <div>
-                        <label>Genre:</label>
-                        <input type="text" name="genre" value={this.state.genre} onChange={this.handleChange} required />
-                    </div>
-
-                    <div>
-                        <label>Year:</label>
-                        <input type="number" name="year" value={this.state.year} onChange={this.handleChange} required />
-                    </div>
-
-                    <div>
-                        <label>spotifyLink:</label>
-                        <input type="text" name="spotifyLink" value={this.state.spotifyLink} onChange={this.handleChange} required />
-                    </div>
-
-                    <button type="submit">Add Song</button>
-                </form>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h2 className="text-2xl font-bold mb-4 text-gray-800">Add a New Song</h2>
+              {this.state.successMessage && <p className="text-green-500 mb-4">{this.state.successMessage}</p>}
+              {this.state.errorMessage && <p className="text-red-500 mb-4">{this.state.errorMessage}</p>}
+              
+              <form onSubmit={this.handleSubmit} className="space-y-4">
+                {['Title', 'Artist', 'Album', 'Genre', 'Year', 'Spotify Link'].map((label) => (
+                  <div key={label}>
+                    <label className="block text-sm font-medium text-gray-700">{label}:</label>
+                    <input
+                      type={label === 'Year' ? 'number' : 'text'}
+                      name={label.toLowerCase().replace(' ', '')}
+                      value={this.state[label.toLowerCase().replace(' ', '')]}
+                      onChange={this.handleChange}
+                      required
+                      className="w-full mt-1 p-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+                    />
+                  </div>
+                ))}
+                <button
+                  type="submit"
+                  className="w-full py-2 mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-300"
+                >
+                  Add Song
+                </button>
+              </form>
             </div>
-        );
+          );
     }
 }
 
