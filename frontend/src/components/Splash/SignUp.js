@@ -156,57 +156,115 @@ class SignUpForm extends Component
 
     return (
       <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
-        <h2 className="text-2xl font-semibold mb-6 text-center" >Sign Up</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-center">Sign Up</h2>
         <form onSubmit={this.handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium">Username:</label>
-            <input type="text" name="username" value={username} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            <input
+              type="text"
+              name="username"
+              value={username}
+              onChange={this.handleChange}
+              required
+              className="w-full mt-1 p-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
             {errors.username && <span className="text-red-500 text-xs">{errors.username}</span>}
           </div>
 
           <div>
             <label className="block text-sm font-medium">Email:</label>
-            <input type="email" name="email" value={email} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={this.handleChange}
+              required
+              className="w-full mt-1 p-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
             {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
           </div>
 
           <div>
             <label className="block text-sm font-medium">Password:</label>
-            <input type="password" name="password" value={password} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={this.handleChange}
+              required
+              className="w-full mt-1 p-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
             {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
           </div>
 
           <div>
             <label className="block text-sm font-medium">Confirm Password:</label>
-            <input type="password" name="confirmPassword" value={confirmPassword} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={confirmPassword}
+              onChange={this.handleChange}
+              required
+              className="w-full mt-1 p-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
             {errors.confirmPassword && <span className="text-red-500 text-xs">{errors.confirmPassword}</span>}
           </div>
 
           <div>
             <label className="block text-sm font-medium">Name:</label>
-            <input type="text" name="name" value={name} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            <input
+              type="text"
+              name="name"
+              value={name}
+              onChange={this.handleChange}
+              required
+              className="w-full mt-1 p-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
             {errors.name && <span className="text-red-500 text-xs">{errors.name}</span>}
           </div>
 
           <div>
             <label className="block text-sm font-medium">Bio:</label>
-            <textarea name="bio" value={bio} onChange={this.handleChange} maxLength={150} className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            <textarea
+              name="bio"
+              value={bio}
+              onChange={this.handleChange}
+              maxLength={150}
+              className="w-full mt-1 p-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
             {errors.bio && <span className="text-red-500 text-xs">{errors.bio}</span>}
           </div>
 
           <div>
             <label className="block text-sm font-medium">Country:</label>
-            <input type="text" name="country" value={country} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            <input
+              type="text"
+              name="country"
+              value={country}
+              onChange={this.handleChange}
+              required
+              className="w-full mt-1 p-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
             {errors.country && <span className="text-red-500 text-xs">{errors.country}</span>}
           </div>
 
           <div>
             <label className="block text-sm font-medium">Profile Picture:</label>
-            <input type="file" accept="image/*" onChange={this.handleFileChange} className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
-            {profilePicture && <span className="text-red-500 text-xs">{profilePicture.name}</span>}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={this.handleFileChange}
+              className="w-full mt-1 p-2 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+            />
+            {profilePicture && <span className="text-gray-600 text-sm">{profilePicture.name}</span>}
           </div>
 
-          <button type="submit" className="w-full py-2 px-4 bg-indigo-500 text-black rounded hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-300">Sign Up</button>
+          <button
+            type="submit"
+            className="w-full py-3 mt-4 bg-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            Sign Up
+          </button>
         </form>
       </div>
     );

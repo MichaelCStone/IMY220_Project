@@ -122,10 +122,10 @@ class LoginForm extends Component
     const { username, password, errors } = this.state;
 
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-          <h2 className="text-3xl font-bold text-center mb-6">Login</h2>
-          <form onSubmit={this.handleSubmit} className="space-y-4">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white">
+        {/* <h2 className="text-5xl font-extrabold tracking-tight mb-6">Login to Groovella</h2> */}
+        <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg text-gray-900">
+          <form onSubmit={this.handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium mb-1">Username:</label>
               <input
@@ -134,7 +134,7 @@ class LoginForm extends Component
                 value={username}
                 onChange={this.handleChange}
                 required
-                className="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
               />
               {errors.username && <span className="text-red-500 text-xs">{errors.username}</span>}
             </div>
@@ -147,18 +147,24 @@ class LoginForm extends Component
                 value={password}
                 onChange={this.handleChange}
                 required
-                className="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
               />
               {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
             </div>
 
             <button
               type="submit"
-              className="w-full py-2 mt-4 bg-black text-white font-semibold rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 transition-all duration-300 text-white font-semibold rounded-lg transform hover:scale-105 shadow-lg"
             >
               Login
             </button>
           </form>
+          <p className="mt-4 text-center">
+            Don't have an account?{' '}
+            <a href="/signup" className="text-blue-600 hover:text-blue-800 transition duration-300">
+              Sign Up
+            </a>
+          </p>
         </div>
       </div>
     );
