@@ -533,10 +533,11 @@ router.post('/addSong', /*#__PURE__*/function () {
         case 0:
           _context10.prev = 0;
           _req$body3 = req.body, title = _req$body3.title, artist = _req$body3.artist, album = _req$body3.album, genre = _req$body3.genre, year = _req$body3.year, spotifyLink = _req$body3.spotifyLink;
+          console.log(req.body); // Log to check the received data
           songsCollection = req.app.locals.songsCollection;
-          _context10.next = 5;
+          _context10.next = 6;
           return songsCollection.countDocuments();
-        case 5:
+        case 6:
           songCount = _context10.sent;
           newSong = {
             simpleId: songCount + 1,
@@ -547,28 +548,28 @@ router.post('/addSong', /*#__PURE__*/function () {
             year: year,
             spotifyLink: spotifyLink
           };
-          _context10.next = 9;
+          _context10.next = 10;
           return songsCollection.insertOne(newSong);
-        case 9:
+        case 10:
           res.status(201).json({
             message: 'Song added successfully',
             newSong: newSong
           });
-          _context10.next = 16;
+          _context10.next = 17;
           break;
-        case 12:
-          _context10.prev = 12;
+        case 13:
+          _context10.prev = 13;
           _context10.t0 = _context10["catch"](0);
-          console.error('Error unfollowing user:', _context10.t0);
+          console.error('Error adding song:', _context10.t0);
           res.status(500).json({
             message: 'Error adding song',
             error: _context10.t0
           });
-        case 16:
+        case 17:
         case "end":
           return _context10.stop();
       }
-    }, _callee10, null, [[0, 12]]);
+    }, _callee10, null, [[0, 13]]);
   }));
   return function (_x19, _x20) {
     return _ref10.apply(this, arguments);
