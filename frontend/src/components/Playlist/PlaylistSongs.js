@@ -8,15 +8,20 @@ class SongList extends Component
   render() {
     const { songs = [] } = this.props; // Set a default empty array if songs is undefined
 
+    console.log(songs);
+
     return (
-      <div className="song-list">
-        <h3>Songs in Playlist</h3>
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">Songs in Playlist</h3>
+        
         {songs.length > 0 ? (
-          songs.map((song, index) => (
-            <Song key={index} song={song} />
-          ))
+          <div className="space-y-4">
+            {songs.map((song, index) => (
+              <Song key={index} song={song} />
+            ))}
+          </div>
         ) : (
-          <p>No songs in this playlist.</p>
+          <p className="text-gray-600">No songs in this playlist.</p>
         )}
       </div>
     );

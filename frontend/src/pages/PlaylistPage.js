@@ -1,125 +1,4 @@
-// // u21497682 - Michael Stone
-// import React, { Component } from 'react';
-// // import { Link } from 'react-router-dom';
-// import Navigation from "../components/General/Navigation"
-// import Playlist from '../components/Playlist/Playlist';
-// import SongList from '../components/Playlist/PlaylistSongs';
-// import AddSongToPlaylist from '../components/General/AddSongToPlaylist';
-// import CommentList from '../components/Playlist/CommentFeed';
-// import AddComment from '../components/Playlist/AddComment';
-// import EditPlaylist from '../components/Playlist/EditPlaylist';
-
-// class PlaylistPage extends Component 
-// {
-//   constructor(props) 
-//   {
-//     super(props);
-
-//     this.state = {
-//       playlist: props.playlist,
-//       songs: props.songs,
-//       isAddingSong: false,
-//       isEditing: false,
-//       newComment: ''
-//     };
-
-//     this.toggleAddSong = this.toggleAddSong.bind(this);
-//     this.handleAddSong = this.handleAddSong.bind(this);
-//     this.handleAddComment = this.handleAddComment.bind(this);
-//     this.toggleEdit = this.toggleEdit.bind(this);
-//     this.handleUpdatePlaylist = this.handleUpdatePlaylist.bind(this);
-//   }
-
-//   toggleAddSong() 
-//   {
-//     this.setState((prevState) => ({
-//       isAddingSong: !prevState.isAddingSong
-//     }));
-//   }
-
-//   handleAddSong(newSongTitle) 
-//   {
-//     // Assuming `songs` state holds the list of all songs
-//     const selectedSong = this.state.songs.find(song => song.title === newSongTitle);
-
-//     if (selectedSong) {
-//       this.setState((prevState) => ({
-//         playlist: {
-//           ...prevState.playlist,
-//           songs: [...prevState.playlist.songs, selectedSong]
-//         },
-//         isAddingSong: false
-//       }));
-//     }
-//   }
-
-//   handleAddComment(newComment) 
-//   {
-//     this.setState((prevState) => ({
-//       playlist: { ...prevState.playlist, comments: [...prevState.playlist.comments, newComment] }
-//     }));
-//   }
-
-//   toggleEdit() 
-//   {
-//     this.setState((prevState) => ({
-//       isEditing: !prevState.isEditing
-//     }));
-//   }
-
-//   handleUpdatePlaylist(updatedPlaylist) 
-//   {
-//     this.setState({ playlist: updatedPlaylist, isEditing: false });
-//   }
-
-//   render() 
-//   {
-//     const { playlist, songs, isAddingSong, isEditing } = this.state;
-
-//     // const { playlists, songs, isAddingSong, isEditing } = this.state;
-//     // const { id } = useParams();
-//     // const playlist = playlists.find(playlist => playlist.id === id);
-
-//     return (
-//       <div>
-//         <h1>Playlist Page!</h1>
-//         <Navigation />
-
-//         <div>
-//           <Playlist playlist={playlist} />
-
-//           <button onClick={this.toggleEdit}>
-//             {isEditing ? 'Cancel Edit' : 'Edit Playlist'}
-//           </button>
-
-//           {isEditing && (<EditPlaylist playlist={playlist} onUpdatePlaylist={this.handleUpdatePlaylist} /> )}
-//         </div>
-        
-
-//         <div className="songs">
-//           {/* <h3>Playlist Songs</h3> */}
-//           <SongList songs={playlist.songs} />
-
-//           <button onClick={this.toggleAddSong}>
-//             {isAddingSong ? 'Cancel' : 'Add Song'}
-//           </button>
-
-//           {/* {isAddingSong && <AddSongToPlaylist addSong={this.handleAddSong} />} */}
-//           {isAddingSong && <AddSongToPlaylist songs={songs} onAddSongToPlaylist={this.handleAddSong} />}
-//         </div>
-
-//         <div className="comments">
-//           <CommentList comments={playlist.comments} />
-
-//           <AddComment  userName="John Doe" onAddComment={this.handleAddComment} /> {/* userPicture="sdasd.jpg" */}
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-
-// export default PlaylistPage;
-
+//u21497682 - Michael Stone
 import React, { Component } from 'react';
 import { useParams } from 'react-router-dom';
 import Navigation from "../components/General/Navigation";
@@ -181,56 +60,74 @@ class PlaylistPage extends Component {
     const songsInPlaylist = playlist.songs || []; // Ensure songs is an array
 
     return (
-      <div>
+      <div className="min-h-screen bg-gray-100">
         <Navigation />
-        <h1>{playlist.name}</h1>
-        <Playlist playlist={playlist} />
+        <div className="max-w-4xl mx-auto p-6">
+          {/* <h1 className="text-3xl font-bold text-gray-800 mb-6">{playlist.name}</h1> */}
+          <Playlist playlist={playlist} />
 
-        <button onClick={this.toggleEdit}>
-          {isEditing ? 'Cancel Edit' : 'Edit Playlist'}
-        </button>
-        {isEditing && (
-          <EditPlaylist
-            playlist={playlist}
-            onUpdatePlaylist={(updatedPlaylist) =>
-              this.setState({ playlist: updatedPlaylist, isEditing: false })
-            }
-          />
-        )}
+          <div className="flex items-center space-x-4 my-6">
+            <button
+              onClick={this.toggleEdit}
+              className="px-4 py-2 bg-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-600 transition"
+            >
+              {isEditing ? 'Cancel Edit' : 'Edit Playlist'}
+            </button>
+            {isEditing && (
+              <EditPlaylist
+                playlist={playlist}
+                onUpdatePlaylist={(updatedPlaylist) =>
+                  this.setState({ playlist: updatedPlaylist, isEditing: false })
+                }
+              />
+            )}
+          </div>
 
-        <div className="songs">
-          <SongList songs={songsInPlaylist} /> {/* Ensure songsInPlaylist is passed */}
-          <button onClick={this.toggleAddSong}>
-            {isAddingSong ? 'Cancel' : 'Add Song'}
-          </button>
-          {isAddingSong && (
-            <AddSongToPlaylist
-              songs={songs}
-              onAddSongToPlaylist={(song) =>
-                this.setState({
-                  playlist: {
-                    ...playlist,
-                    songs: [...songsInPlaylist, song],
-                  },
-                })
-              }
-            />
-          )}
-        </div>
+          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">Songs in Playlist</h3>
+            <SongList songs={songsInPlaylist} />
+            <div className="mt-4">
+              <button
+                onClick={this.toggleAddSong}
+                className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
+              >
+                {isAddingSong ? 'Cancel' : 'Add Song'}
+              </button>
+            </div>
+            {isAddingSong && (
+              <div className="mt-4">
+                <AddSongToPlaylist
+                  songs={songs}
+                  onAddSongToPlaylist={(song) =>
+                    this.setState({
+                      playlist: {
+                        ...playlist,
+                        songs: [...songsInPlaylist, song],
+                      },
+                    })
+                  }
+                />
+              </div>
+            )}
+          </div>
 
-        <div className="comments">
-          <CommentList comments={playlist.comments || []} />
-          <AddComment
-            userName="John Doe"
-            onAddComment={(comment) =>
-              this.setState({
-                playlist: {
-                  ...playlist,
-                  comments: [...(playlist.comments || []), comment],
-                },
-              })
-            }
-          />
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">Comments</h3>
+            <CommentList comments={playlist.comments || []} />
+            <div className="mt-4">
+              <AddComment
+                userName="John Doe"
+                onAddComment={(comment) =>
+                  this.setState({
+                    playlist: {
+                      ...playlist,
+                      comments: [...(playlist.comments || []), comment],
+                    },
+                  })
+                }
+              />
+            </div>
+          </div>
         </div>
       </div>
     );

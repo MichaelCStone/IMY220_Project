@@ -8,14 +8,17 @@ class CommentList extends Component
     const { comments = [] } = this.props; // Set a default empty array if comments is undefined
 
     return (
-      <div className="comment-list">
-        <h3>Comments</h3>
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">Comments</h3>
+        
         {comments.length > 0 ? (
-          comments.map((comment, index) => (
-            <Comment key={index} comment={comment} />
-          ))
+          <div className="space-y-4">
+            {comments.map((comment, index) => (
+              <Comment key={index} comment={comment} />
+            ))}
+          </div>
         ) : (
-          <p>No comments yet.</p>
+          <p className="text-gray-600">No comments yet.</p>
         )}
       </div>
     );
