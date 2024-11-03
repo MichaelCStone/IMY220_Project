@@ -23,10 +23,23 @@ class CreatePlaylist extends Component
 
   handleInputChange(event) 
   {
+    // const { name, value, files } = event.target;
+    // this.setState({
+    //   [name]: files ? files[0] : value  // Handle file input separately
+    // });
     const { name, value, files } = event.target;
-    this.setState({
-      [name]: files ? files[0] : value  // Handle file input separately
-    });
+
+    if (name === 'picture' && files && files[0]) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        this.setState({ picture: reader.result }); // Set the Base64 string
+      };
+      reader.readAsDataURL(files[0]);
+    } else {
+      this.setState({
+        [name]: value
+      });
+    }
   }
 
   // handleSubmit(event) 

@@ -155,12 +155,12 @@ class ProfilePage extends Component
             {playlists.map((playlist, index) => (
               <div key={index} className="mb-4">
                 <PlaylistPreview playlist={playlist} />
-                <AddSongToPlaylist
+                {/* <AddSongToPlaylist
                   songs={this.props.songs}
                   onAddSongToPlaylist={this.handleAddPlaylist}
                   playlistId={playlist.simpleId}
                   ownerId={profile.simpleId}
-                />
+                /> */}
               </div>
             ))}
             <button

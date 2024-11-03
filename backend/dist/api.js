@@ -586,9 +586,12 @@ router.post('/addPlaylist', /*#__PURE__*/function () {
           playlistsCollection = req.app.locals.playlistsCollection;
           profilesCollection = req.app.locals.profilesCollection;
           _req$body4 = req.body, name = _req$body4.name, picture = _req$body4.picture, genre = _req$body4.genre, author = _req$body4.author, category = _req$body4.category, hashtags = _req$body4.hashtags, comments = _req$body4.comments, description = _req$body4.description, songs = _req$body4.songs, ownerId = _req$body4.ownerId; // Ensure the fields are arrays (default to empty arrays if missing)
-          validatedHashtags = hashtags || [];
-          validatedComments = comments || [];
-          validatedSongs = songs || []; // Validate required fields (example)
+          // const validatedHashtags = hashtags || [];
+          // const validatedComments = comments || [];
+          // const validatedSongs = songs || [];
+          validatedHashtags = Array.isArray(hashtags) ? hashtags : [];
+          validatedComments = Array.isArray(comments) ? comments : [];
+          validatedSongs = Array.isArray(songs) ? songs : []; // Validate required fields (example)
           if (!(!name || !ownerId || !Array.isArray(validatedSongs))) {
             _context11.next = 9;
             break;
@@ -932,16 +935,74 @@ router["delete"]('/deletePlaylist/:simpleId/:ownerSimpleId', /*#__PURE__*/functi
 }());
 
 //add song to playlist
-router.put('/addSongToPlaylist/:playlistId/:ownerId', /*#__PURE__*/function () {
+// router.put('/addSongsToPlaylist/:playlistId/:ownerId', async (req, res) => {
+
+//     try 
+//     {
+//         const playlistsCollection = req.app.locals.playlistsCollection;
+//         const profilesCollection = req.app.locals.profilesCollection;
+//         const { songId } = req.body; // songId comes from the request body
+//         const { playlistId, ownerId } = req.params; // playlistId and ownerId come from URL parameters
+
+//         // Check if the playlist exists
+//         const playlist = await playlistsCollection.findOne({ simpleId: parseInt(playlistId) });
+
+//         if (!playlist) 
+//         {
+//             return res.status(404).json({ message: 'Playlist not found' });
+//         }
+
+//         // Check if the user is the owner of the playlist
+//         if (playlist.ownerId !== parseInt(ownerId)) 
+//         {
+//             return res.status(403).json({ message: 'You can only modify your own playlists' });
+//         }
+
+//         // Ensure songId is provided
+//         if (!songId) 
+//         {
+//             return res.status(400).json({ message: 'Missing required songId' });
+//         }
+
+//         // Check if the song is already in the playlist
+//         if (playlist.songs.includes(parseInt(songId)))
+//         {
+//             return res.status(200).json({ message: 'Song is already in the playlist' });
+//         }
+
+//         // Add the song to the playlist's songs array
+//         const updateResult = await playlistsCollection.updateOne(
+//             { simpleId: parseInt(playlistId) }, 
+//             { $addToSet: { songs: parseInt(songId) } } // $addToSet prevents duplicates
+//         );
+
+//         if (updateResult.modifiedCount === 1) 
+//         {
+//             res.status(200).json({ message: 'Song added to playlist successfully' });
+//         } 
+//         else 
+//         {
+//             throw new Error('Failed to add song to playlist');
+//         }
+
+//     } 
+//     catch (error) 
+//     {
+//         console.error('Error adding song to playlist:', error);
+
+//         res.status(500).json({ message: 'Error adding song to playlist', error: error.message });
+//     }
+// });
+router.put('/addSongsToPlaylist/:playlistId/:ownerId', /*#__PURE__*/function () {
   var _ref16 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee16(req, res) {
-    var playlistsCollection, profilesCollection, songId, _req$params2, playlistId, ownerId, playlist, updateResult;
+    var playlistsCollection, profilesCollection, songIds, _req$params2, playlistId, ownerId, playlist, newSongIds, updateResult;
     return _regeneratorRuntime().wrap(function _callee16$(_context16) {
       while (1) switch (_context16.prev = _context16.next) {
         case 0:
           _context16.prev = 0;
           playlistsCollection = req.app.locals.playlistsCollection;
           profilesCollection = req.app.locals.profilesCollection;
-          songId = req.body.songId; // songId comes from the request body
+          songIds = req.body.songIds; // songIds should be an array of song IDs
           _req$params2 = req.params, playlistId = _req$params2.playlistId, ownerId = _req$params2.ownerId; // playlistId and ownerId come from URL parameters
           // Check if the playlist exists
           _context16.next = 7;
@@ -966,60 +1027,69 @@ router.put('/addSongToPlaylist/:playlistId/:ownerId', /*#__PURE__*/function () {
             message: 'You can only modify your own playlists'
           }));
         case 12:
-          if (songId) {
+          if (!(!Array.isArray(songIds) || songIds.length === 0)) {
             _context16.next = 14;
             break;
           }
           return _context16.abrupt("return", res.status(400).json({
-            message: 'Missing required songId'
+            message: 'Missing required songIds array'
           }));
         case 14:
-          if (!playlist.songs.includes(parseInt(songId))) {
-            _context16.next = 16;
+          // Filter out any songs that are already in the playlist
+          newSongIds = songIds.map(function (id) {
+            return parseInt(id);
+          }) // Ensure IDs are integers
+          .filter(function (songId) {
+            return !playlist.songs.includes(songId);
+          });
+          if (!(newSongIds.length === 0)) {
+            _context16.next = 17;
             break;
           }
           return _context16.abrupt("return", res.status(200).json({
-            message: 'Song is already in the playlist'
+            message: 'All selected songs are already in the playlist'
           }));
-        case 16:
-          _context16.next = 18;
+        case 17:
+          _context16.next = 19;
           return playlistsCollection.updateOne({
             simpleId: parseInt(playlistId)
           }, {
             $addToSet: {
-              songs: parseInt(songId)
+              songs: {
+                $each: newSongIds
+              }
             }
-          } // $addToSet prevents duplicates
+          } // $each allows adding multiple items to $addToSet
           );
-        case 18:
+        case 19:
           updateResult = _context16.sent;
           if (!(updateResult.modifiedCount === 1)) {
-            _context16.next = 23;
+            _context16.next = 24;
             break;
           }
           res.status(200).json({
-            message: 'Song added to playlist successfully'
+            message: 'Songs added to playlist successfully'
           });
-          _context16.next = 24;
+          _context16.next = 25;
           break;
-        case 23:
-          throw new Error('Failed to add song to playlist');
         case 24:
-          _context16.next = 30;
+          throw new Error('Failed to add songs to playlist');
+        case 25:
+          _context16.next = 31;
           break;
-        case 26:
-          _context16.prev = 26;
+        case 27:
+          _context16.prev = 27;
           _context16.t0 = _context16["catch"](0);
-          console.error('Error adding song to playlist:', _context16.t0);
+          console.error('Error adding songs to playlist:', _context16.t0);
           res.status(500).json({
-            message: 'Error adding song to playlist',
+            message: 'Error adding songs to playlist',
             error: _context16.t0.message
           });
-        case 30:
+        case 31:
         case "end":
           return _context16.stop();
       }
-    }, _callee16, null, [[0, 26]]);
+    }, _callee16, null, [[0, 27]]);
   }));
   return function (_x31, _x32) {
     return _ref16.apply(this, arguments);
