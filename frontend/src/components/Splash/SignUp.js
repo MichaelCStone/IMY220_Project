@@ -91,6 +91,7 @@ class SignUpForm extends Component
     
     reader.onloadend = () => {
       this.setState({ profilePicture: reader.result });
+      console.log("Base64 Encoded Image:", reader.result); // Add this line
     };
     
     if (file) {
@@ -108,6 +109,7 @@ class SignUpForm extends Component
     {
         if (!errors.username && !errors.email && !errors.password) 
         {
+          console.log(profilePicture);
             try 
             {
                 const response = await fetch(`http://localhost:${thePort}/api/signup`, {
@@ -122,7 +124,7 @@ class SignUpForm extends Component
                         name,
                         bio,
                         country,
-                        profilePicture,
+                        picture: profilePicture,
                         followers,
                         following,
                         playlists,

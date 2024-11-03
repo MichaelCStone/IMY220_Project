@@ -11,8 +11,8 @@ class Profile extends Component {
                 {/* Profile Picture Placeholder */}
                 <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
                     {/* Uncomment and replace with the actual image source when available */}
-                    {/* <img src={profile.picture} alt="Profile" className="w-full h-full object-cover rounded-full" /> */}
-                    <span className="text-gray-500 text-sm">No Image</span>
+                    <img src={profile.picture} alt="Profile" className="w-full h-full object-cover rounded-full" />
+                    {/* <span className="text-gray-500 text-sm">No Image</span> */}
                 </div>
 
                 {/* Profile Details */}

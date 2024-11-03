@@ -63,7 +63,7 @@ router.post('/login', async (req, res) => {
 
 //creating a new user
 router.post('/signup', async (req, res) => {
-
+    console.log("Received Data:", req.body); 
     const { name, bio, country, picture, followers, following, playlists, username, password, email } = req.body;
 
     try 

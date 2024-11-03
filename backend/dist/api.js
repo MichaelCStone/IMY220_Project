@@ -89,41 +89,42 @@ router.post('/signup', /*#__PURE__*/function () {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
+          console.log("Received Data:", req.body);
           _req$body2 = req.body, name = _req$body2.name, bio = _req$body2.bio, country = _req$body2.country, picture = _req$body2.picture, followers = _req$body2.followers, following = _req$body2.following, playlists = _req$body2.playlists, username = _req$body2.username, password = _req$body2.password, email = _req$body2.email;
-          _context2.prev = 1;
-          _context2.next = 4;
+          _context2.prev = 2;
+          _context2.next = 5;
           return req.app.locals.profilesCollection.findOne({
             username: username
           });
-        case 4:
+        case 5:
           existingUser = _context2.sent;
-          _context2.next = 7;
+          _context2.next = 8;
           return req.app.locals.profilesCollection.findOne({
             email: email
           });
-        case 7:
+        case 8:
           existingEmail = _context2.sent;
           if (!existingEmail) {
-            _context2.next = 10;
+            _context2.next = 11;
             break;
           }
           return _context2.abrupt("return", res.status(409).json({
             status: 'error',
             message: 'Email already in use. Please use another email.'
           }));
-        case 10:
+        case 11:
           if (!existingUser) {
-            _context2.next = 12;
+            _context2.next = 13;
             break;
           }
           return _context2.abrupt("return", res.status(409).json({
             status: 'error',
             message: 'Username already exists. Please choose another one.'
           }));
-        case 12:
-          _context2.next = 14;
+        case 13:
+          _context2.next = 15;
           return req.app.locals.profilesCollection.find().toArray();
-        case 14:
+        case 15:
           existingProfiles = _context2.sent;
           newSimpleId = existingProfiles.length + 1; // Simple incrementing ID
           // Create new profile object
@@ -142,29 +143,29 @@ router.post('/signup', /*#__PURE__*/function () {
             email: email
           };
           console.log("New profile object:", newProfile);
-          _context2.next = 20;
+          _context2.next = 21;
           return req.app.locals.profilesCollection.insertOne(newProfile);
-        case 20:
+        case 21:
           res.status(201).json({
             status: 'success',
             message: 'Profile created successfully',
             profileId: newSimpleId
           });
-          _context2.next = 27;
+          _context2.next = 28;
           break;
-        case 23:
-          _context2.prev = 23;
-          _context2.t0 = _context2["catch"](1);
+        case 24:
+          _context2.prev = 24;
+          _context2.t0 = _context2["catch"](2);
           console.error("Error inserting profile:", _context2.t0);
           res.status(500).json({
             status: 'error',
             message: 'Profile creation failed'
           });
-        case 27:
+        case 28:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[1, 23]]);
+    }, _callee2, null, [[2, 24]]);
   }));
   return function (_x3, _x4) {
     return _ref2.apply(this, arguments);
