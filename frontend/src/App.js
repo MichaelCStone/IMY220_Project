@@ -7,6 +7,7 @@ import PlaylistPage from './pages/PlaylistPage';
 import ProfilePage from './pages/ProfilePage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
+import PlaylistPageWrapper from './pages/PlaylistPage';
 
 const thePort = 3000;
 
@@ -113,15 +114,24 @@ class App extends Component {
     }
   };
 
+  // fetchPlaylists = async () => {
+  //   try 
+  //   {
+  //     const response = await fetch(`http://localhost:${thePort}/api/playlists`);
+  //     const playlists = await response.json();
+  //     this.setState({ playlists });
+  //   } 
+  //   catch (error) 
+  //   {
+  //     console.error('Error fetching playlists:', error);
+  //   }
+  // };
   fetchPlaylists = async () => {
-    try 
-    {
+    try {
       const response = await fetch(`http://localhost:${thePort}/api/playlists`);
       const playlists = await response.json();
       this.setState({ playlists });
-    } 
-    catch (error) 
-    {
+    } catch (error) {
       console.error('Error fetching playlists:', error);
     }
   };
@@ -156,6 +166,9 @@ class App extends Component {
           <Route path="/playlist" element={<PlaylistPage playlist={playlists} songs={songs} />} />
           {/* <Route path="/playlist/:id" element={<PlaylistPage playlist={playlists[0]} songs={songs} />} /> */}
           {/* <Route path="/playlist/:id" element={<PlaylistPage playlists={playlists} songs={songs} />} /> */}
+
+          {/* <Route path="/playlist/:playlistId" element={<PlaylistPage songs={songs} />} /> */}
+          <Route path="/playlist/:playlistId" element={<PlaylistPageWrapper playlists={playlists} songs={songs} />} />
 
           {/* <Route path="/profile" element={<ProfilePage profile={profile} playlists={playlists} followers={followers} following={following} />} /> */}
           <Route path="/profile/:username" element={<ProfilePage profile={profile} playlists={playlists} followers={followers} following={following} />} />
