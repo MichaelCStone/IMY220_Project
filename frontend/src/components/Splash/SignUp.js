@@ -155,58 +155,58 @@ class SignUpForm extends Component
     const { username, email, password, confirmPassword, name, bio, country, profilePicture, errors } = this.state;
 
     return (
-      <div className="signup-form">
-        <h2>Sign Up</h2>
-        <form onSubmit={this.handleSubmit}>
+      <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+        <h2 className="text-2xl font-semibold mb-6 text-center" >Sign Up</h2>
+        <form onSubmit={this.handleSubmit} className="space-y-4">
           <div>
-            <label>Username:</label>
-            <input type="text" name="username" value={username} onChange={this.handleChange} required />
-            {errors.username && <span className="error">{errors.username}</span>}
+            <label className="block text-sm font-medium">Username:</label>
+            <input type="text" name="username" value={username} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            {errors.username && <span className="text-red-500 text-xs">{errors.username}</span>}
           </div>
 
           <div>
-            <label>Email:</label>
-            <input type="email" name="email" value={email} onChange={this.handleChange} required />
-            {errors.email && <span className="error">{errors.email}</span>}
+            <label className="block text-sm font-medium">Email:</label>
+            <input type="email" name="email" value={email} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
           </div>
 
           <div>
-            <label>Password:</label>
-            <input type="password" name="password" value={password} onChange={this.handleChange} required />
-            {errors.password && <span className="error">{errors.password}</span>}
+            <label className="block text-sm font-medium">Password:</label>
+            <input type="password" name="password" value={password} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
           </div>
 
           <div>
-            <label>Confirm Password:</label>
-            <input type="password" name="confirmPassword" value={confirmPassword} onChange={this.handleChange} required />
-            {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
+            <label className="block text-sm font-medium">Confirm Password:</label>
+            <input type="password" name="confirmPassword" value={confirmPassword} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            {errors.confirmPassword && <span className="text-red-500 text-xs">{errors.confirmPassword}</span>}
           </div>
 
           <div>
-            <label>Name:</label>
-            <input type="text" name="name" value={name} onChange={this.handleChange} required />
-            {errors.name && <span className="error">{errors.name}</span>}
+            <label className="block text-sm font-medium">Name:</label>
+            <input type="text" name="name" value={name} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            {errors.name && <span className="text-red-500 text-xs">{errors.name}</span>}
           </div>
 
           <div>
-            <label>Bio:</label>
-            <textarea name="bio" value={bio} onChange={this.handleChange} maxLength={150} />
-            {errors.bio && <span className="error">{errors.bio}</span>}
+            <label className="block text-sm font-medium">Bio:</label>
+            <textarea name="bio" value={bio} onChange={this.handleChange} maxLength={150} className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            {errors.bio && <span className="text-red-500 text-xs">{errors.bio}</span>}
           </div>
 
           <div>
-            <label>Country:</label>
-            <input type="text" name="country" value={country} onChange={this.handleChange} required />
-            {errors.country && <span className="error">{errors.country}</span>}
+            <label className="block text-sm font-medium">Country:</label>
+            <input type="text" name="country" value={country} onChange={this.handleChange} required className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            {errors.country && <span className="text-red-500 text-xs">{errors.country}</span>}
           </div>
 
           <div>
-            <label>Profile Picture:</label>
-            <input type="file" accept="image/*" onChange={this.handleFileChange} />
-            {profilePicture && <span className="file-name">{profilePicture.name}</span>}
+            <label className="block text-sm font-medium">Profile Picture:</label>
+            <input type="file" accept="image/*" onChange={this.handleFileChange} className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"/>
+            {profilePicture && <span className="text-red-500 text-xs">{profilePicture.name}</span>}
           </div>
 
-          <button type="submit">Sign Up</button>
+          <button type="submit" className="w-full py-2 px-4 bg-indigo-500 text-white rounded hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-300">Sign Up</button>
         </form>
       </div>
     );
