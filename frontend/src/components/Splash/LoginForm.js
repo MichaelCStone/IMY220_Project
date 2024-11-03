@@ -122,23 +122,44 @@ class LoginForm extends Component
     const { username, password, errors } = this.state;
 
     return (
-      <div className="login-form">
-        <h2>Login</h2>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <label>Username:</label>
-            <input type="text" name="username" value={this.state.username} onChange={this.handleChange} required />
-            {errors.username && <span className="error">{errors.username}</span>}
-          </div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
+          <h2 className="text-3xl font-bold text-center mb-6">Login</h2>
+          <form onSubmit={this.handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Username:</label>
+              <input
+                type="text"
+                name="username"
+                value={username}
+                onChange={this.handleChange}
+                required
+                className="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"
+              />
+              {errors.username && <span className="text-red-500 text-xs">{errors.username}</span>}
+            </div>
 
-          <div>
-            <label>Password:</label>
-            <input type="password" name="password" value={this.state.password} onChange={this.handleChange} required />
-            {errors.password && <span className="error">{errors.password}</span>}
-          </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Password:</label>
+              <input
+                type="password"
+                name="password"
+                value={password}
+                onChange={this.handleChange}
+                required
+                className="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-indigo-300"
+              />
+              {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
+            </div>
 
-          <button type="submit">Login</button>
-        </form>
+            <button
+              type="submit"
+              className="w-full py-2 mt-4 bg-black text-white font-semibold rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+            >
+              Login
+            </button>
+          </form>
+        </div>
       </div>
     );
   }

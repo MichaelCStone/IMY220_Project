@@ -206,7 +206,7 @@ class SignUpForm extends Component
             {profilePicture && <span className="text-red-500 text-xs">{profilePicture.name}</span>}
           </div>
 
-          <button type="submit" className="w-full py-2 px-4 bg-indigo-500 text-white rounded hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-300">Sign Up</button>
+          <button type="submit" className="w-full py-2 px-4 bg-indigo-500 text-black rounded hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-300">Sign Up</button>
         </form>
       </div>
     );
