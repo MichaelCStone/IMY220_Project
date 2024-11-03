@@ -586,64 +586,6 @@ router.delete('/deletePlaylist/:simpleId/:ownerSimpleId', async (req, res) => {
 });
 
 //add song to playlist
-// router.put('/addSongsToPlaylist/:playlistId/:ownerId', async (req, res) => {
-
-//     try 
-//     {
-//         const playlistsCollection = req.app.locals.playlistsCollection;
-//         const profilesCollection = req.app.locals.profilesCollection;
-//         const { songId } = req.body; // songId comes from the request body
-//         const { playlistId, ownerId } = req.params; // playlistId and ownerId come from URL parameters
-
-//         // Check if the playlist exists
-//         const playlist = await playlistsCollection.findOne({ simpleId: parseInt(playlistId) });
-
-//         if (!playlist) 
-//         {
-//             return res.status(404).json({ message: 'Playlist not found' });
-//         }
-
-//         // Check if the user is the owner of the playlist
-//         if (playlist.ownerId !== parseInt(ownerId)) 
-//         {
-//             return res.status(403).json({ message: 'You can only modify your own playlists' });
-//         }
-
-//         // Ensure songId is provided
-//         if (!songId) 
-//         {
-//             return res.status(400).json({ message: 'Missing required songId' });
-//         }
-
-//         // Check if the song is already in the playlist
-//         if (playlist.songs.includes(parseInt(songId)))
-//         {
-//             return res.status(200).json({ message: 'Song is already in the playlist' });
-//         }
-
-//         // Add the song to the playlist's songs array
-//         const updateResult = await playlistsCollection.updateOne(
-//             { simpleId: parseInt(playlistId) }, 
-//             { $addToSet: { songs: parseInt(songId) } } // $addToSet prevents duplicates
-//         );
-
-//         if (updateResult.modifiedCount === 1) 
-//         {
-//             res.status(200).json({ message: 'Song added to playlist successfully' });
-//         } 
-//         else 
-//         {
-//             throw new Error('Failed to add song to playlist');
-//         }
-
-//     } 
-//     catch (error) 
-//     {
-//         console.error('Error adding song to playlist:', error);
-
-//         res.status(500).json({ message: 'Error adding song to playlist', error: error.message });
-//     }
-// });
 router.put('/addSongsToPlaylist/:playlistId/:ownerId', async (req, res) => {
     try {
         const playlistsCollection = req.app.locals.playlistsCollection;
@@ -785,6 +727,7 @@ router.post('/playlists/:id/addComment', async (req, res) => {
     }
 });
 
+//get specific song
 router.get('/songs/:simpleId', async (req, res) => {
     const simpleId = parseInt(req.params.simpleId);
   
