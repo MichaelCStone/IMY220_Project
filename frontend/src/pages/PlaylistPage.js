@@ -14,12 +14,13 @@ class PlaylistPage extends Component {
     super(props);
     this.state = {
       playlist: null,
+      songs: [],
       isAddingSong: false,
       isEditing: false,
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { playlistId } = this.props.params;
     const { playlists } = this.props;
 
@@ -27,8 +28,16 @@ class PlaylistPage extends Component {
       const selectedPlaylist = playlists.find(
         playlist => playlist.simpleId === parseInt(playlistId)
       );
+
       if (selectedPlaylist) {
         this.setState({ playlist: selectedPlaylist });
+
+        // Fetch full details of each song by simpleId
+        const songs = await Promise.all(
+          selectedPlaylist.songs.map(simpleId => this.fetchSongDetails(simpleId))
+        );
+        
+        this.setState({ songs });
       } else {
         console.error('Playlist not found');
       }
@@ -36,6 +45,17 @@ class PlaylistPage extends Component {
       console.error('Playlists data is undefined');
     }
   }
+
+  fetchSongDetails = async (simpleId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/songs/${simpleId}`);
+      const song = await response.json();
+      return song;
+    } catch (error) {
+      console.error('Error fetching song details:', error);
+      return null;
+    }
+  };
 
   toggleAddSong = () => {
     this.setState((prevState) => ({
@@ -50,84 +70,63 @@ class PlaylistPage extends Component {
   };
 
   render() {
-    const { playlist, isAddingSong, isEditing } = this.state;
-    const { songs } = this.props;
+    const { playlist, songs, isAddingSong, isEditing } = this.state;
 
     if (!playlist) {
       return <div>Loading...</div>;
     }
 
-    const songsInPlaylist = playlist.songs || []; // Ensure songs is an array
-
     return (
-      <div className="min-h-screen bg-gray-100">
+      <div>
         <Navigation />
-        <div className="max-w-4xl mx-auto p-6">
-          {/* <h1 className="text-3xl font-bold text-gray-800 mb-6">{playlist.name}</h1> */}
-          <Playlist playlist={playlist} />
+        <h1>{playlist.name}</h1>
+        <Playlist playlist={playlist} />
 
-          <div className="flex items-center space-x-4 my-6">
-            <button
-              onClick={this.toggleEdit}
-              className="px-4 py-2 bg-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-600 transition"
-            >
-              {isEditing ? 'Cancel Edit' : 'Edit Playlist'}
-            </button>
-            {isEditing && (
-              <EditPlaylist
-                playlist={playlist}
-                onUpdatePlaylist={(updatedPlaylist) =>
-                  this.setState({ playlist: updatedPlaylist, isEditing: false })
-                }
-              />
-            )}
-          </div>
+        <button onClick={this.toggleEdit}>
+          {isEditing ? 'Cancel Edit' : 'Edit Playlist'}
+        </button>
+        {isEditing && (
+          <EditPlaylist
+            playlist={playlist}
+            onUpdatePlaylist={(updatedPlaylist) =>
+              this.setState({ playlist: updatedPlaylist, isEditing: false })
+            }
+          />
+        )}
 
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">Songs in Playlist</h3>
-            <SongList songs={songsInPlaylist} />
-            <div className="mt-4">
-              <button
-                onClick={this.toggleAddSong}
-                className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
-              >
-                {isAddingSong ? 'Cancel' : 'Add Song'}
-              </button>
-            </div>
-            {isAddingSong && (
-              <div className="mt-4">
-                <AddSongToPlaylist
-                  songs={songs}
-                  onAddSongToPlaylist={(song) =>
-                    this.setState({
-                      playlist: {
-                        ...playlist,
-                        songs: [...songsInPlaylist, song],
-                      },
-                    })
-                  }
-                />
-              </div>
-            )}
-          </div>
+        <div className="songs">
+          <SongList songs={songs} />
+          <button onClick={this.toggleAddSong}>
+            {isAddingSong ? 'Cancel' : 'Add Song'}
+          </button>
+          {isAddingSong && (
+            <AddSongToPlaylist
+              songs={songs}
+              onAddSongToPlaylist={(song) =>
+                this.setState({
+                  playlist: {
+                    ...playlist,
+                    songs: [...playlist.songs, song.simpleId],
+                  },
+                })
+              }
+            />
+          )}
+        </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">Comments</h3>
-            <CommentList comments={playlist.comments || []} />
-            <div className="mt-4">
-              <AddComment
-                userName="John Doe"
-                onAddComment={(comment) =>
-                  this.setState({
-                    playlist: {
-                      ...playlist,
-                      comments: [...(playlist.comments || []), comment],
-                    },
-                  })
-                }
-              />
-            </div>
-          </div>
+        <div className="comments">
+          <CommentList comments={playlist.comments || []} />
+          <AddComment
+            userName="John Doe"
+            onAddComment={(comment) =>
+              this.setState({
+                playlist: {
+                  ...playlist,
+                  comments: [...(playlist.comments || []), comment],
+                },
+              })
+            }
+          />
         </div>
       </div>
     );

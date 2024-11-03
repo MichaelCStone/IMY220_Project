@@ -785,4 +785,20 @@ router.post('/playlists/:id/addComment', async (req, res) => {
     }
 });
 
+router.get('/songs/:simpleId', async (req, res) => {
+    const simpleId = parseInt(req.params.simpleId);
+  
+    try {
+      const song = await req.app.locals.songsCollection.findOne({ simpleId });
+      if (song) {
+        res.json(song);
+      } else {
+        res.status(404).json({ message: 'Song not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching song:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
 export default router;

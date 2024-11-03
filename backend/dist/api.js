@@ -1229,4 +1229,44 @@ router.post('/playlists/:id/addComment', /*#__PURE__*/function () {
     return _ref18.apply(this, arguments);
   };
 }());
+router.get('/songs/:simpleId', /*#__PURE__*/function () {
+  var _ref19 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee19(req, res) {
+    var simpleId, song;
+    return _regeneratorRuntime().wrap(function _callee19$(_context19) {
+      while (1) switch (_context19.prev = _context19.next) {
+        case 0:
+          simpleId = parseInt(req.params.simpleId);
+          _context19.prev = 1;
+          _context19.next = 4;
+          return req.app.locals.songsCollection.findOne({
+            simpleId: simpleId
+          });
+        case 4:
+          song = _context19.sent;
+          if (song) {
+            res.json(song);
+          } else {
+            res.status(404).json({
+              message: 'Song not found'
+            });
+          }
+          _context19.next = 12;
+          break;
+        case 8:
+          _context19.prev = 8;
+          _context19.t0 = _context19["catch"](1);
+          console.error('Error fetching song:', _context19.t0);
+          res.status(500).json({
+            message: 'Server error'
+          });
+        case 12:
+        case "end":
+          return _context19.stop();
+      }
+    }, _callee19, null, [[1, 8]]);
+  }));
+  return function (_x37, _x38) {
+    return _ref19.apply(this, arguments);
+  };
+}());
 var _default = exports["default"] = router;
