@@ -145,7 +145,7 @@
 
 // u21497682 - Michael Stone
 import React, { Component } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from "../components/General/Navigation";
 import Playlist from '../components/Playlist/Playlist';
 import SongList from '../components/Playlist/PlaylistSongs';
@@ -210,6 +210,28 @@ class PlaylistPage extends Component {
     }
   };
 
+  deletePlaylist = async () => {
+    const { playlist } = this.state;
+    const navigate = this.props.navigate;
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/deletePlaylist/${playlist.simpleId}/${playlist.ownerId}`,
+        { method: 'DELETE' }
+      );
+
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message);
+        navigate('/home'); // Redirect to Home page on successful deletion
+      } else {
+        console.error(result.message);
+      }
+    } catch (error) {
+      console.error('Error deleting playlist:', error);
+    }
+  };
+
   toggleAddSong = () => {
     this.setState((prevState) => ({
       isAddingSong: !prevState.isAddingSong,
@@ -248,6 +270,9 @@ class PlaylistPage extends Component {
                 }
               />
             )}
+            <button onClick={this.deletePlaylist} className="bg-red-500 text-white px-4 py-2 rounded-lg mt-2">
+              Delete Playlist
+            </button>
           </>
         )}
 
@@ -298,5 +323,6 @@ class PlaylistPage extends Component {
 
 export default function PlaylistPageWrapper(props) {
   const params = useParams();
-  return <PlaylistPage {...props} params={params} />;
+  const navigate = useNavigate();
+  return <PlaylistPage {...props} params={params} navigate={navigate} />;
 }
